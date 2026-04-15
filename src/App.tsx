@@ -1,40 +1,50 @@
 import React from 'react';
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
+import { useGetHomes } from './gql/hooks/homeHooks';
+import { useGetVehicles } from './gql/hooks/vehicleHooks';
 import './index.css';
 
-const App: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  console.log("Remote App One render", location.pathname);
-
-function Home() {
-  console.log('rendering Home');
-  const navigate = useNavigate();
+function HomeMaintenanceIndex() {
+  const { data: homes, isPending: homesPending, isError: homesError } = useGetHomes();
+  const { data: vehicles, isPending: vehiclesPending, isError: vehiclesError } = useGetVehicles();
 
   return (
     <div>
-      <h1>Hey there! I'm the Home Maintenance app!</h1>
-      <button onClick={() => navigate('feck')}>Feck!</button>
+      <h1>Home Maintenance</h1>
+
+      <h2>Homes</h2>
+      {homesPending && <div>Loading...</div>}
+      {homesError && <div>Failed to load homes.</div>}
+      {homes?.length === 0 && <p>No homes yet.</p>}
+      <ul>
+        {homes?.map((home) => (
+          <li key={home.id}>{home.address}</li>
+        ))}
+      </ul>
+
+      <h2>Vehicles</h2>
+      {vehiclesPending && <div>Loading...</div>}
+      {vehiclesError && <div>Failed to load vehicles.</div>}
+      {vehicles?.length === 0 && <p>No vehicles yet.</p>}
+      <ul>
+        {vehicles?.map((v) => (
+          <li key={v.id}>{v.year} {v.make} {v.model}</li>
+        ))}
+      </ul>
     </div>
   );
 }
 
-  function Feck() {
-    console.log('rendering Feck');
-    return <div>Hey there, Feck!</div>;
-  }
+function NotFound() {
+  return <div>Not found.</div>;
+}
 
-  function NotFound() {
-    console.log('rendering NotFound');
-    return <div>Error, Will Robinson!</div>;
-  }
-
+const App: React.FC = () => {
   return (
     <Routes>
-      <Route index element={<Home />} />
-      <Route path="feck" element={<Feck />} />
+      <Route index element={<HomeMaintenanceIndex />} />
       <Route path="*" element={<NotFound />} />
-    </Routes >
+    </Routes>
   );
 }
 
