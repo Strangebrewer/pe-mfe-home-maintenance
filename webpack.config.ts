@@ -9,14 +9,14 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const APP_NAME = 'mfe_app_one';
+const APP_NAME = 'pe_mfe_home_maintenance';
 
 const config = {
   ...createWebpackConfig({
     appName: APP_NAME,
     resolve: path.resolve,
     _dirname: __dirname,
-    port: 3001,
+    port: 3004,
   }),
 
     plugins: [

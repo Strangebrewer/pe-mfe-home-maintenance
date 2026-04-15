@@ -13,7 +13,7 @@ function Home() {
 
   return (
     <div>
-      <h1>Hey there!</h1>
+      <h1>Hey there! I'm the Home Maintenance app!</h1>
       <button onClick={() => navigate('feck')}>Feck!</button>
     </div>
   );
