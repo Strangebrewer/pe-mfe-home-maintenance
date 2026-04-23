@@ -14,9 +14,11 @@ export type Vehicle = {
 export type Home = {
   id: string;
   address: string;
+  isPrimary: boolean;
   yearBuilt?: number;
   sqFootage?: number;
   notes?: string;
+  customData?: string;
 };
 
 export type HomeTask = {
@@ -25,6 +27,7 @@ export type HomeTask = {
   name: string;
   frequency: HomeTaskFrequency;
   description?: string;
+  lastCompletionDate?: string;
 };
 
 export type HomeCompletion = {
