@@ -6,6 +6,7 @@ import { ServiceRecord, ServiceRecordType } from '../types/homeMaintenance';
 import { formatDate, todayISO } from '../utils/taskUtils';
 import InlineField from '../components/InlineField';
 import Modal from '../components/Modal';
+import { GhostButton, Button } from '@bka-stuff/pe-mfe-utils';
 
 const SERVICE_RECORD_LABELS: Record<ServiceRecordType, string> = {
   [ServiceRecordType.OIL_CHANGE]: 'Oil Change',
@@ -31,8 +32,8 @@ export default function VehicleDetailPage() {
   const [confirmDeleteVehicle, setConfirmDeleteVehicle] = useState(false);
   const [confirmDeleteRecord, setConfirmDeleteRecord] = useState<string | null>(null);
 
-  if (isPending) return <div className="tw:p-6 tw:text-gray-500">Loading...</div>;
-  if (isError || !vehicle) return <div className="tw:p-6 tw:text-red-500">Vehicle not found.</div>;
+  if (isPending) return <div className="tw:p-6 tw:text-[#c4b5fd]">Loading...</div>;
+  if (isError || !vehicle) return <div className="tw:p-6 tw:text-[#e22c5a]">Vehicle not found.</div>;
 
   const handleUpdate = (field: string, raw: string) => {
     const numericFields = ['year', 'mileage'];
@@ -46,29 +47,24 @@ export default function VehicleDetailPage() {
 
   return (
     <div className="tw:max-w-3xl tw:mx-auto tw:px-4 tw:py-6">
-      <button onClick={() => navigate('/home-maintenance')} className="tw:text-sm tw:text-gray-500 tw:hover:text-gray-700 tw:mb-4 tw:flex tw:items-center tw:gap-1">
+      <button onClick={() => navigate('/home-maintenance')} className="tw:text-sm tw:text-[#c4b5fd] tw:hover:text-[#f0e6ff] tw:mb-4 tw:flex tw:items-center tw:gap-1">
         ← Back
       </button>
 
       {/* Vehicle info */}
-      <div className="tw:bg-white tw:rounded-lg tw:border tw:border-gray-200 tw:p-5 tw:mb-6">
+      <div className="tw:bg-[#1a0f2e] tw:rounded-lg tw:border tw:border-[rgba(188,19,254,0.3)] tw:p-5 tw:mb-6">
         <div className="tw:flex tw:items-start tw:justify-between tw:mb-3">
-          <h1 className="tw:text-xl tw:font-bold tw:text-gray-900">
+          <h1 className="tw:text-xl tw:font-bold tw:text-[#f0e6ff]">
             {vehicle.year} {vehicle.make} {vehicle.model}
           </h1>
           {confirmDeleteVehicle ? (
             <div className="tw:flex tw:items-center tw:gap-2">
-              <span className="tw:text-xs tw:text-gray-500">Delete vehicle?</span>
-              <button onClick={handleDeleteVehicle} className="tw:text-xs tw:text-red-600 tw:hover:text-red-800 tw:font-medium">Yes</button>
-              <button onClick={() => setConfirmDeleteVehicle(false)} className="tw:text-xs tw:text-gray-400">No</button>
+              <span className="tw:text-xs tw:text-[#c4b5fd]">Delete vehicle?</span>
+              <button onClick={handleDeleteVehicle} className="tw:text-xs tw:text-[#e22c5a] tw:hover:text-white tw:font-medium">Yes</button>
+              <button onClick={() => setConfirmDeleteVehicle(false)} className="tw:text-xs tw:text-[#c4b5fd]">No</button>
             </div>
           ) : (
-            <button
-              onClick={() => setConfirmDeleteVehicle(true)}
-              className="tw:text-xs tw:text-red-500 tw:hover:text-red-700 tw:border tw:border-red-200 tw:rounded tw:px-2 tw:py-1"
-            >
-              Delete
-            </button>
+            <GhostButton last color='red' text="Delete" onClick={() => setConfirmDeleteVehicle(true)} />
           )}
         </div>
 
@@ -90,30 +86,25 @@ export default function VehicleDetailPage() {
       </div>
 
       {/* Service Records */}
-      <div className="tw:bg-white tw:rounded-lg tw:border tw:border-gray-200">
-        <div className="tw:flex tw:items-center tw:justify-between tw:px-5 tw:py-4 tw:border-b">
-          <h2 className="tw:font-semibold tw:text-gray-800">Service Records</h2>
-          <button
-            onClick={() => setShowAddRecord(true)}
-            className="tw:text-sm tw:bg-blue-600 tw:text-white tw:hover:bg-blue-700 tw:rounded tw:px-3 tw:py-1"
-          >
-            + Add record
-          </button>
+      <div className="tw:bg-[#1a0f2e] tw:rounded-lg tw:border tw:border-[rgba(188,19,254,0.3)]">
+        <div className="tw:flex tw:items-center tw:justify-between tw:px-5 tw:py-4 tw:border-b tw:border-[rgba(188,19,254,0.2)]">
+          <h2 className="tw:font-semibold tw:text-[#f0e6ff]">Service Records</h2>
+          <Button last text="+ Add record" variant='purple' onClick={() => setShowAddRecord(true)} />
         </div>
 
         {sortedRecords.length === 0 && (
-          <p className="tw:px-5 tw:py-4 tw:text-gray-500 tw:text-sm">No service records yet.</p>
+          <p className="tw:px-5 tw:py-4 tw:text-[#c4b5fd] tw:text-sm">No service records yet.</p>
         )}
 
         {sortedRecords.map((record) => (
-          <div key={record.id} className="tw:px-5 tw:py-4 tw:border-b tw:last:border-b-0">
+          <div key={record.id} className="tw:px-5 tw:py-4 tw:border-b tw:border-[rgba(188,19,254,0.1)] tw:last:border-b-0">
             <div className="tw:flex tw:items-start tw:justify-between tw:gap-3">
               <div className="tw:flex-1 tw:min-w-0">
                 <div className="tw:flex tw:items-center tw:gap-2 tw:mb-2">
-                  <span className="tw:text-sm tw:font-medium tw:text-gray-900">
+                  <span className="tw:text-sm tw:font-medium tw:text-[#f0e6ff]">
                     {record.name || SERVICE_RECORD_LABELS[record.type]}
                   </span>
-                  <span className="tw:text-xs tw:bg-gray-100 tw:text-gray-600 tw:rounded tw:px-1.5 tw:py-0.5">
+                  <span className="tw:text-xs tw:bg-[rgba(26,15,46,0.8)] tw:text-[#c4b5fd] tw:rounded tw:px-1.5 tw:py-0.5">
                     {SERVICE_RECORD_LABELS[record.type]}
                   </span>
                 </div>
@@ -149,21 +140,21 @@ export default function VehicleDetailPage() {
                 />
               </div>
               <div className="tw:flex tw:flex-col tw:items-end tw:gap-2 tw:shrink-0">
-                <span className="tw:text-xs tw:text-gray-400">{formatDate(record.date)}</span>
+                <span className="tw:text-xs tw:text-[#c4b5fd]">{formatDate(record.date)}</span>
                 {confirmDeleteRecord === record.id ? (
                   <div className="tw:flex tw:items-center tw:gap-1">
                     <button
                       onClick={() => deleteRecord.mutate(record.id, { onSuccess: () => setConfirmDeleteRecord(null) })}
-                      className="tw:text-xs tw:text-red-600 tw:font-medium"
+                      className="tw:text-xs tw:text-[#e22c5a] tw:font-medium"
                     >
                       Yes
                     </button>
-                    <button onClick={() => setConfirmDeleteRecord(null)} className="tw:text-xs tw:text-gray-400">No</button>
+                    <button onClick={() => setConfirmDeleteRecord(null)} className="tw:text-xs tw:text-[#c4b5fd]">No</button>
                   </div>
                 ) : (
                   <button
                     onClick={() => setConfirmDeleteRecord(record.id)}
-                    className="tw:text-xs tw:text-red-400 tw:hover:text-red-600"
+                    className="tw:text-xs tw:text-[#e22c5a] tw:hover:text-white"
                   >
                     Delete
                   </button>
@@ -214,13 +205,16 @@ function AddServiceRecordModal({ vehicleId, currentMileage, onClose, onSave, isP
     });
   };
 
+  const inputCls =
+    'tw:w-full tw:border tw:border-[#BC13FE] tw:rounded tw:px-3 tw:py-2 tw:text-sm tw:bg-[#0d0a14] tw:text-[#f0e6ff] tw:focus:outline-none tw:focus:ring-1 tw:focus:ring-[#BC13FE]';
+
   return (
     <Modal title="Add Service Record" onClose={onClose}>
       <form onSubmit={handleSubmit} className="tw:flex tw:flex-col tw:gap-4">
         <div>
-          <label className="tw:block tw:text-sm tw:font-medium tw:text-gray-700 tw:mb-1">Type *</label>
+          <label className="tw:block tw:text-sm tw:font-medium tw:text-[#c4b5fd] tw:mb-1">Type *</label>
           <select value={type} onChange={(e) => setType(e.target.value as ServiceRecordType)}
-            className="tw:w-full tw:border tw:border-gray-300 tw:rounded tw:px-3 tw:py-2 tw:text-sm">
+            className={inputCls}>
             {Object.values(ServiceRecordType).map((t) => (
               <option key={t} value={t}>{SERVICE_RECORD_LABELS[t]}</option>
             ))}
@@ -228,39 +222,39 @@ function AddServiceRecordModal({ vehicleId, currentMileage, onClose, onSave, isP
         </div>
         <div className="tw:grid tw:grid-cols-2 tw:gap-3">
           <div>
-            <label className="tw:block tw:text-sm tw:font-medium tw:text-gray-700 tw:mb-1">Date *</label>
+            <label className="tw:block tw:text-sm tw:font-medium tw:text-[#c4b5fd] tw:mb-1">Date *</label>
             <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required
-              className="tw:w-full tw:border tw:border-gray-300 tw:rounded tw:px-3 tw:py-2 tw:text-sm" />
+              className={inputCls} />
           </div>
           <div>
-            <label className="tw:block tw:text-sm tw:font-medium tw:text-gray-700 tw:mb-1">Mileage *</label>
+            <label className="tw:block tw:text-sm tw:font-medium tw:text-[#c4b5fd] tw:mb-1">Mileage *</label>
             <input type="number" value={mileage} onChange={(e) => setMileage(e.target.value)} required
-              className="tw:w-full tw:border tw:border-gray-300 tw:rounded tw:px-3 tw:py-2 tw:text-sm" />
+              className={inputCls} />
           </div>
         </div>
         <div className="tw:grid tw:grid-cols-2 tw:gap-3">
           <div>
-            <label className="tw:block tw:text-sm tw:font-medium tw:text-gray-700 tw:mb-1">Cost</label>
+            <label className="tw:block tw:text-sm tw:font-medium tw:text-[#c4b5fd] tw:mb-1">Cost</label>
             <input type="number" step="0.01" value={cost} onChange={(e) => setCost(e.target.value)}
-              className="tw:w-full tw:border tw:border-gray-300 tw:rounded tw:px-3 tw:py-2 tw:text-sm" placeholder="0.00" />
+              className={inputCls} placeholder="0.00" />
           </div>
           <div>
-            <label className="tw:block tw:text-sm tw:font-medium tw:text-gray-700 tw:mb-1">Name</label>
+            <label className="tw:block tw:text-sm tw:font-medium tw:text-[#c4b5fd] tw:mb-1">Name</label>
             <input value={name} onChange={(e) => setName(e.target.value)}
-              className="tw:w-full tw:border tw:border-gray-300 tw:rounded tw:px-3 tw:py-2 tw:text-sm" placeholder="e.g. Air filter" />
+              className={inputCls} placeholder="e.g. Air filter" />
           </div>
         </div>
         <div>
-          <label className="tw:block tw:text-sm tw:font-medium tw:text-gray-700 tw:mb-1">Description</label>
+          <label className="tw:block tw:text-sm tw:font-medium tw:text-[#c4b5fd] tw:mb-1">Description</label>
           <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2}
-            className="tw:w-full tw:border tw:border-gray-300 tw:rounded tw:px-3 tw:py-2 tw:text-sm" />
+            className={inputCls} />
         </div>
         <div className="tw:flex tw:justify-end tw:gap-2 tw:pt-1">
-          <button type="button" onClick={onClose} className="tw:text-sm tw:text-gray-600 tw:hover:text-gray-800 tw:px-4 tw:py-2">
+          <button type="button" onClick={onClose} className="tw:text-sm tw:text-[#c4b5fd] tw:hover:text-[#f0e6ff] tw:px-4 tw:py-2">
             Cancel
           </button>
           <button type="submit" disabled={isPending}
-            className="tw:text-sm tw:bg-blue-600 tw:text-white tw:hover:bg-blue-700 tw:disabled:opacity-50 tw:rounded tw:px-4 tw:py-2">
+            className="tw:text-sm tw:border tw:border-[#BC13FE] tw:text-[#BC13FE] tw:hover:bg-[#BC13FE] tw:hover:text-white tw:disabled:opacity-50 tw:rounded tw:px-4 tw:py-2">
             {isPending ? 'Saving...' : 'Add Record'}
           </button>
         </div>

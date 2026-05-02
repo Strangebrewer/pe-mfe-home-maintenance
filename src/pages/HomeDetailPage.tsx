@@ -8,6 +8,9 @@ import { FREQUENCY_LABELS, formatDate, getDaysUntilDue, sortTasksByUrgency, toda
 import InlineField from '../components/InlineField';
 import Modal from '../components/Modal';
 
+const inputCls =
+  'tw:w-full tw:border tw:border-[#BC13FE] tw:rounded tw:px-3 tw:py-2 tw:text-sm tw:bg-[#0d0a14] tw:text-[#f0e6ff] tw:focus:outline-none tw:focus:ring-1 tw:focus:ring-[#BC13FE]';
+
 export default function HomeDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -29,8 +32,8 @@ export default function HomeDetailPage() {
   const [confirmDeleteHome, setConfirmDeleteHome] = useState(false);
   const [confirmDeleteTask, setConfirmDeleteTask] = useState<string | null>(null);
 
-  if (homePending) return <div className="tw:p-6 tw:text-gray-500">Loading...</div>;
-  if (homeError || !home) return <div className="tw:p-6 tw:text-red-500">Home not found.</div>;
+  if (homePending) return <div className="tw:p-6 tw:text-[#c4b5fd]">Loading...</div>;
+  if (homeError || !home) return <div className="tw:p-6 tw:text-[#e22c5a]">Home not found.</div>;
 
   const customData = home.customData ? (JSON.parse(home.customData) as Record<string, string>) : {};
 
@@ -46,31 +49,31 @@ export default function HomeDetailPage() {
 
   return (
     <div className="tw:max-w-3xl tw:mx-auto tw:px-4 tw:py-6">
-      <button onClick={() => navigate('/home-maintenance')} className="tw:text-sm tw:text-gray-500 tw:hover:text-gray-700 tw:mb-4 tw:flex tw:items-center tw:gap-1">
+      <button onClick={() => navigate('/home-maintenance')} className="tw:text-sm tw:text-[#c4b5fd] tw:hover:text-[#f0e6ff] tw:mb-4 tw:flex tw:items-center tw:gap-1">
         ← Back
       </button>
 
       {/* Home info */}
-      <div className="tw:bg-white tw:rounded-lg tw:border tw:border-gray-200 tw:p-5 tw:mb-6">
+      <div className="tw:bg-[#1a0f2e] tw:rounded-lg tw:border tw:border-[rgba(188,19,254,0.3)] tw:p-5 tw:mb-6">
         <div className="tw:flex tw:items-start tw:justify-between tw:mb-3">
-          <h1 className="tw:text-xl tw:font-bold tw:text-gray-900">{home.address}</h1>
+          <h1 className="tw:text-xl tw:font-bold tw:text-[#f0e6ff]">{home.address}</h1>
           <div className="tw:flex tw:gap-2">
             <button
               onClick={() => setShowCustomData(true)}
-              className="tw:text-xs tw:text-gray-500 tw:hover:text-gray-700 tw:border tw:border-gray-300 tw:rounded tw:px-2 tw:py-1"
+              className="tw:text-xs tw:text-[#c4b5fd] tw:hover:text-[#f0e6ff] tw:border tw:border-[rgba(188,19,254,0.3)] tw:rounded tw:px-2 tw:py-1"
             >
               Custom data
             </button>
             {confirmDeleteHome ? (
               <div className="tw:flex tw:items-center tw:gap-2">
-                <span className="tw:text-xs tw:text-gray-500">Delete home?</span>
-                <button onClick={handleDeleteHome} className="tw:text-xs tw:text-red-600 tw:hover:text-red-800 tw:font-medium">Yes</button>
-                <button onClick={() => setConfirmDeleteHome(false)} className="tw:text-xs tw:text-gray-400">No</button>
+                <span className="tw:text-xs tw:text-[#c4b5fd]">Delete home?</span>
+                <button onClick={handleDeleteHome} className="tw:text-xs tw:text-[#e22c5a] tw:hover:text-white tw:font-medium">Yes</button>
+                <button onClick={() => setConfirmDeleteHome(false)} className="tw:text-xs tw:text-[#c4b5fd]">No</button>
               </div>
             ) : (
               <button
                 onClick={() => setConfirmDeleteHome(true)}
-                className="tw:text-xs tw:text-red-500 tw:hover:text-red-700 tw:border tw:border-red-200 tw:rounded tw:px-2 tw:py-1"
+                className="tw:text-xs tw:text-[#e22c5a] tw:hover:text-white tw:border tw:border-[rgba(226,44,90,0.4)] tw:rounded tw:px-2 tw:py-1"
               >
                 Delete
               </button>
@@ -84,11 +87,11 @@ export default function HomeDetailPage() {
         <InlineField label="Notes" value={home.notes} onSave={(v) => handleUpdateHome('notes', v)} placeholder="None" />
 
         {Object.keys(customData).length > 0 && (
-          <div className="tw:mt-3 tw:pt-3 tw:border-t tw:border-gray-100">
+          <div className="tw:mt-3 tw:pt-3 tw:border-t tw:border-[rgba(188,19,254,0.15)]">
             {Object.entries(customData).map(([key, val]) => (
               <div key={key} className="tw:flex tw:gap-3 tw:py-0.5">
-                <span className="tw:text-sm tw:text-gray-500 tw:w-28 tw:shrink-0">{key}</span>
-                <span className="tw:text-sm tw:text-gray-900">{val}</span>
+                <span className="tw:text-sm tw:text-[#c4b5fd] tw:w-28 tw:shrink-0">{key}</span>
+                <span className="tw:text-sm tw:text-[#f0e6ff]">{val}</span>
               </div>
             ))}
           </div>
@@ -96,42 +99,42 @@ export default function HomeDetailPage() {
       </div>
 
       {/* Tasks */}
-      <div className="tw:bg-white tw:rounded-lg tw:border tw:border-gray-200">
-        <div className="tw:flex tw:items-center tw:justify-between tw:px-5 tw:py-4 tw:border-b">
-          <h2 className="tw:font-semibold tw:text-gray-800">Tasks</h2>
+      <div className="tw:bg-[#1a0f2e] tw:rounded-lg tw:border tw:border-[rgba(188,19,254,0.3)]">
+        <div className="tw:flex tw:items-center tw:justify-between tw:px-5 tw:py-4 tw:border-b tw:border-[rgba(188,19,254,0.2)]">
+          <h2 className="tw:font-semibold tw:text-[#f0e6ff]">Tasks</h2>
           <button
             onClick={() => setShowAddTask(true)}
-            className="tw:text-sm tw:bg-blue-600 tw:text-white tw:hover:bg-blue-700 tw:rounded tw:px-3 tw:py-1"
+            className="tw:text-sm tw:bg-transparent tw:border tw:border-[#BC13FE] tw:text-[#BC13FE] tw:hover:bg-[#BC13FE] tw:hover:text-white tw:rounded tw:px-3 tw:py-1"
           >
             + Add task
           </button>
         </div>
 
         {sortedTasks.length === 0 && (
-          <p className="tw:px-5 tw:py-4 tw:text-gray-500 tw:text-sm">No tasks yet.</p>
+          <p className="tw:px-5 tw:py-4 tw:text-[#c4b5fd] tw:text-sm">No tasks yet.</p>
         )}
 
         {sortedTasks.map((task) => {
           const days = getDaysUntilDue(task);
           let dueLabel = '';
-          let dueClass = 'tw:text-gray-400';
+          let dueClass = 'tw:text-[#c4b5fd]';
           if (task.frequency === HomeTaskFrequency.AS_NEEDED) {
             dueLabel = 'As needed';
           } else if (!task.lastCompletionDate) {
             dueLabel = 'Never done';
-            dueClass = 'tw:text-red-500';
+            dueClass = 'tw:text-[#e22c5a]';
           } else if (days !== null && days < 0) {
             dueLabel = `${Math.abs(days)}d overdue`;
-            dueClass = 'tw:text-red-500';
+            dueClass = 'tw:text-[#e22c5a]';
           } else if (days !== null && days <= 7) {
             dueLabel = `Due in ${days}d`;
-            dueClass = 'tw:text-amber-500';
+            dueClass = 'tw:text-[#00E5FF]';
           } else if (days !== null) {
             dueLabel = `Due in ${days}d`;
           }
 
           return (
-            <div key={task.id} className="tw:px-5 tw:py-4 tw:border-b tw:last:border-b-0">
+            <div key={task.id} className="tw:px-5 tw:py-4 tw:border-b tw:border-[rgba(188,19,254,0.1)] tw:last:border-b-0">
               <div className="tw:flex tw:items-start tw:justify-between tw:gap-3 tw:mb-2">
                 <div className="tw:flex-1 tw:min-w-0">
                   <InlineField
@@ -140,11 +143,11 @@ export default function HomeDetailPage() {
                     onSave={(v) => updateTask.mutate({ id: task.id, homeId: task.homeId, name: v })}
                   />
                   <div className="tw:flex tw:items-center tw:gap-3 tw:py-1.5">
-                    <span className="tw:text-sm tw:text-gray-500 tw:w-28 tw:shrink-0">Frequency</span>
+                    <span className="tw:text-sm tw:text-[#c4b5fd] tw:w-28 tw:shrink-0">Frequency</span>
                     <select
                       value={task.frequency}
                       onChange={(e) => updateTask.mutate({ id: task.id, homeId: task.homeId, frequency: e.target.value as HomeTaskFrequency })}
-                      className="tw:border tw:border-gray-300 tw:rounded tw:text-sm tw:px-2 tw:py-1"
+                      className="tw:border tw:border-[#BC13FE] tw:rounded tw:text-sm tw:px-2 tw:py-1 tw:bg-[#0d0a14] tw:text-[#f0e6ff]"
                     >
                       {Object.values(HomeTaskFrequency).map((f) => (
                         <option key={f} value={f}>{FREQUENCY_LABELS[f]}</option>
@@ -161,12 +164,12 @@ export default function HomeDetailPage() {
                 <div className="tw:flex tw:flex-col tw:items-end tw:gap-2 tw:shrink-0">
                   <span className={`tw:text-xs tw:font-medium ${dueClass}`}>{dueLabel}</span>
                   {task.lastCompletionDate && (
-                    <span className="tw:text-xs tw:text-gray-400">Last: {formatDate(task.lastCompletionDate)}</span>
+                    <span className="tw:text-xs tw:text-[#c4b5fd]">Last: {formatDate(task.lastCompletionDate)}</span>
                   )}
                   <div className="tw:flex tw:gap-2">
                     <button
                       onClick={() => setLogTaskId({ id: task.id, homeId: task.homeId, name: task.name })}
-                      className="tw:text-xs tw:bg-green-50 tw:text-green-700 tw:hover:bg-green-100 tw:border tw:border-green-200 tw:rounded tw:px-2 tw:py-1"
+                      className="tw:text-xs tw:bg-transparent tw:border tw:border-[#51CB20] tw:text-[#51CB20] tw:hover:bg-[#51CB20] tw:hover:text-[#0d0a14] tw:rounded tw:px-2 tw:py-1"
                     >
                       Log
                     </button>
@@ -174,16 +177,16 @@ export default function HomeDetailPage() {
                       <div className="tw:flex tw:items-center tw:gap-1">
                         <button
                           onClick={() => deleteTask.mutate(task.id, { onSuccess: () => setConfirmDeleteTask(null) })}
-                          className="tw:text-xs tw:text-red-600 tw:font-medium"
+                          className="tw:text-xs tw:text-[#e22c5a] tw:font-medium"
                         >
                           Yes
                         </button>
-                        <button onClick={() => setConfirmDeleteTask(null)} className="tw:text-xs tw:text-gray-400">No</button>
+                        <button onClick={() => setConfirmDeleteTask(null)} className="tw:text-xs tw:text-[#c4b5fd]">No</button>
                       </div>
                     ) : (
                       <button
                         onClick={() => setConfirmDeleteTask(task.id)}
-                        className="tw:text-xs tw:text-red-400 tw:hover:text-red-600"
+                        className="tw:text-xs tw:text-[#e22c5a] tw:hover:text-white"
                       >
                         Delete
                       </button>
@@ -258,31 +261,31 @@ function AddTaskModal({ homeId, onClose, onSave, isPending }: {
     <Modal title="Add Task" onClose={onClose}>
       <form onSubmit={handleSubmit} className="tw:flex tw:flex-col tw:gap-4">
         <div>
-          <label className="tw:block tw:text-sm tw:font-medium tw:text-gray-700 tw:mb-1">Name *</label>
+          <label className="tw:block tw:text-sm tw:font-medium tw:text-[#c4b5fd] tw:mb-1">Name *</label>
           <input value={name} onChange={(e) => setName(e.target.value)} required
-            className="tw:w-full tw:border tw:border-gray-300 tw:rounded tw:px-3 tw:py-2 tw:text-sm"
+            className="tw:w-full tw:border tw:border-[#BC13FE] tw:rounded tw:px-3 tw:py-2 tw:text-sm tw:bg-[#0d0a14] tw:text-[#f0e6ff] tw:focus:outline-none tw:focus:ring-1 tw:focus:ring-[#BC13FE]"
             placeholder="Change HVAC filter" />
         </div>
         <div>
-          <label className="tw:block tw:text-sm tw:font-medium tw:text-gray-700 tw:mb-1">Frequency *</label>
+          <label className="tw:block tw:text-sm tw:font-medium tw:text-[#c4b5fd] tw:mb-1">Frequency *</label>
           <select value={frequency} onChange={(e) => setFrequency(e.target.value as HomeTaskFrequency)}
-            className="tw:w-full tw:border tw:border-gray-300 tw:rounded tw:px-3 tw:py-2 tw:text-sm">
+            className="tw:w-full tw:border tw:border-[#BC13FE] tw:rounded tw:px-3 tw:py-2 tw:text-sm tw:bg-[#0d0a14] tw:text-[#f0e6ff] tw:focus:outline-none tw:focus:ring-1 tw:focus:ring-[#BC13FE]">
             {Object.values(HomeTaskFrequency).map((f) => (
               <option key={f} value={f}>{FREQUENCY_LABELS[f]}</option>
             ))}
           </select>
         </div>
         <div>
-          <label className="tw:block tw:text-sm tw:font-medium tw:text-gray-700 tw:mb-1">Description</label>
+          <label className="tw:block tw:text-sm tw:font-medium tw:text-[#c4b5fd] tw:mb-1">Description</label>
           <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2}
-            className="tw:w-full tw:border tw:border-gray-300 tw:rounded tw:px-3 tw:py-2 tw:text-sm" />
+            className="tw:w-full tw:border tw:border-[#BC13FE] tw:rounded tw:px-3 tw:py-2 tw:text-sm tw:bg-[#0d0a14] tw:text-[#f0e6ff] tw:focus:outline-none tw:focus:ring-1 tw:focus:ring-[#BC13FE]" />
         </div>
         <div className="tw:flex tw:justify-end tw:gap-2 tw:pt-1">
-          <button type="button" onClick={onClose} className="tw:text-sm tw:text-gray-600 tw:hover:text-gray-800 tw:px-4 tw:py-2">
+          <button type="button" onClick={onClose} className="tw:text-sm tw:text-[#c4b5fd] tw:hover:text-[#f0e6ff] tw:px-4 tw:py-2">
             Cancel
           </button>
           <button type="submit" disabled={isPending}
-            className="tw:text-sm tw:bg-blue-600 tw:text-white tw:hover:bg-blue-700 tw:disabled:opacity-50 tw:rounded tw:px-4 tw:py-2">
+            className="tw:text-sm tw:border tw:border-[#BC13FE] tw:text-[#BC13FE] tw:hover:bg-[#BC13FE] tw:hover:text-white tw:disabled:opacity-50 tw:rounded tw:px-4 tw:py-2">
             {isPending ? 'Saving...' : 'Add Task'}
           </button>
         </div>
@@ -322,26 +325,26 @@ function CustomDataModal({ customData, onClose, onSave, isPending }: {
               value={row.key}
               onChange={(e) => updateRow(i, 'key', e.target.value)}
               placeholder="Field name"
-              className="tw:flex-1 tw:border tw:border-gray-300 tw:rounded tw:px-2 tw:py-1.5 tw:text-sm"
+              className="tw:flex-1 tw:border tw:border-[#BC13FE] tw:rounded tw:px-2 tw:py-1.5 tw:text-sm tw:bg-[#0d0a14] tw:text-[#f0e6ff] tw:focus:outline-none tw:focus:ring-1 tw:focus:ring-[#BC13FE]"
             />
             <input
               value={row.value}
               onChange={(e) => updateRow(i, 'value', e.target.value)}
               placeholder="Value"
-              className="tw:flex-1 tw:border tw:border-gray-300 tw:rounded tw:px-2 tw:py-1.5 tw:text-sm"
+              className="tw:flex-1 tw:border tw:border-[#BC13FE] tw:rounded tw:px-2 tw:py-1.5 tw:text-sm tw:bg-[#0d0a14] tw:text-[#f0e6ff] tw:focus:outline-none tw:focus:ring-1 tw:focus:ring-[#BC13FE]"
             />
-            <button type="button" onClick={() => removeRow(i)} className="tw:text-gray-400 tw:hover:text-red-500 tw:text-lg tw:leading-none">×</button>
+            <button type="button" onClick={() => removeRow(i)} className="tw:text-[#e22c5a] tw:hover:text-white tw:text-lg tw:leading-none">×</button>
           </div>
         ))}
-        <button type="button" onClick={addRow} className="tw:text-sm tw:text-blue-600 tw:hover:text-blue-800 tw:text-left">
+        <button type="button" onClick={addRow} className="tw:text-sm tw:text-[#00E5FF] tw:hover:text-white tw:text-left">
           + Add field
         </button>
         <div className="tw:flex tw:justify-end tw:gap-2 tw:pt-2">
-          <button type="button" onClick={onClose} className="tw:text-sm tw:text-gray-600 tw:hover:text-gray-800 tw:px-4 tw:py-2">
+          <button type="button" onClick={onClose} className="tw:text-sm tw:text-[#c4b5fd] tw:hover:text-[#f0e6ff] tw:px-4 tw:py-2">
             Cancel
           </button>
           <button type="submit" disabled={isPending}
-            className="tw:text-sm tw:bg-blue-600 tw:text-white tw:hover:bg-blue-700 tw:disabled:opacity-50 tw:rounded tw:px-4 tw:py-2">
+            className="tw:text-sm tw:border tw:border-[#BC13FE] tw:text-[#BC13FE] tw:hover:bg-[#BC13FE] tw:hover:text-white tw:disabled:opacity-50 tw:rounded tw:px-4 tw:py-2">
             {isPending ? 'Saving...' : 'Save'}
           </button>
         </div>
@@ -369,26 +372,26 @@ function LogCompletionModal({ taskName, onClose, onSave, isPending }: {
     <Modal title={`Log: ${taskName}`} onClose={onClose}>
       <form onSubmit={handleSubmit} className="tw:flex tw:flex-col tw:gap-4">
         <div>
-          <label className="tw:block tw:text-sm tw:font-medium tw:text-gray-700 tw:mb-1">Date *</label>
+          <label className="tw:block tw:text-sm tw:font-medium tw:text-[#c4b5fd] tw:mb-1">Date *</label>
           <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required
-            className="tw:w-full tw:border tw:border-gray-300 tw:rounded tw:px-3 tw:py-2 tw:text-sm" />
+            className="tw:w-full tw:border tw:border-[#BC13FE] tw:rounded tw:px-3 tw:py-2 tw:text-sm tw:bg-[#0d0a14] tw:text-[#f0e6ff] tw:focus:outline-none tw:focus:ring-1 tw:focus:ring-[#BC13FE]" />
         </div>
         <div>
-          <label className="tw:block tw:text-sm tw:font-medium tw:text-gray-700 tw:mb-1">Cost</label>
+          <label className="tw:block tw:text-sm tw:font-medium tw:text-[#c4b5fd] tw:mb-1">Cost</label>
           <input type="number" step="0.01" value={cost} onChange={(e) => setCost(e.target.value)}
-            className="tw:w-full tw:border tw:border-gray-300 tw:rounded tw:px-3 tw:py-2 tw:text-sm" placeholder="0.00" />
+            className="tw:w-full tw:border tw:border-[#BC13FE] tw:rounded tw:px-3 tw:py-2 tw:text-sm tw:bg-[#0d0a14] tw:text-[#f0e6ff] tw:focus:outline-none tw:focus:ring-1 tw:focus:ring-[#BC13FE]" placeholder="0.00" />
         </div>
         <div>
-          <label className="tw:block tw:text-sm tw:font-medium tw:text-gray-700 tw:mb-1">Notes</label>
+          <label className="tw:block tw:text-sm tw:font-medium tw:text-[#c4b5fd] tw:mb-1">Notes</label>
           <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={2}
-            className="tw:w-full tw:border tw:border-gray-300 tw:rounded tw:px-3 tw:py-2 tw:text-sm" />
+            className="tw:w-full tw:border tw:border-[#BC13FE] tw:rounded tw:px-3 tw:py-2 tw:text-sm tw:bg-[#0d0a14] tw:text-[#f0e6ff] tw:focus:outline-none tw:focus:ring-1 tw:focus:ring-[#BC13FE]" />
         </div>
         <div className="tw:flex tw:justify-end tw:gap-2 tw:pt-1">
-          <button type="button" onClick={onClose} className="tw:text-sm tw:text-gray-600 tw:hover:text-gray-800 tw:px-4 tw:py-2">
+          <button type="button" onClick={onClose} className="tw:text-sm tw:text-[#c4b5fd] tw:hover:text-[#f0e6ff] tw:px-4 tw:py-2">
             Cancel
           </button>
           <button type="submit" disabled={isPending}
-            className="tw:text-sm tw:bg-green-600 tw:text-white tw:hover:bg-green-700 tw:disabled:opacity-50 tw:rounded tw:px-4 tw:py-2">
+            className="tw:text-sm tw:border tw:border-[#51CB20] tw:text-[#51CB20] tw:hover:bg-[#51CB20] tw:hover:text-[#0d0a14] tw:disabled:opacity-50 tw:rounded tw:px-4 tw:py-2">
             {isPending ? 'Saving...' : 'Log Completion'}
           </button>
         </div>
