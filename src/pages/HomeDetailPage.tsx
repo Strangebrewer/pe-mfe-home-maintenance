@@ -44,7 +44,7 @@ export default function HomeDetailPage() {
   };
 
   const handleDeleteHome = () => {
-    deleteHome.mutate(home.id, { onSuccess: () => navigate('/') });
+    deleteHome.mutate(home.id, { onSuccess: () => navigate('/home-maintenance') });
   };
 
   return (

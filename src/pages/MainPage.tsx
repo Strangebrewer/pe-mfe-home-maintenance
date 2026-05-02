@@ -42,21 +42,22 @@ export default function MainPage() {
       <div className="tw:mb-8">
         <div className="tw:flex tw:items-center tw:justify-between tw:mb-4">
           <div className="tw:flex tw:items-center tw:gap-3">
-            <h1 className="tw:text-2xl tw:font-bold tw:text-[#f0e6ff]">
-              {activeHome?.address ?? 'Home Maintenance'}
-            </h1>
-            {homes && homes.length > 1 && (
+            {homes && homes.length > 1 ? (
               <select
                 value={activeHomeId}
                 onChange={(e) => setSelectedHomeId(e.target.value)}
-                className="tw:border tw:border-[#BC13FE] tw:rounded tw:text-sm tw:px-2 tw:py-1 tw:bg-[#0d0a14] tw:text-[#f0e6ff]"
+                className="tw:max-w-[480px] tw:bg-transparent tw:border-0 tw:border-b tw:border-[#4b008277] tw:text-2xl tw:font-bold tw:text-[#f0e6ff] tw:cursor-pointer tw:pr-6 tw:appearance-auto tw:focus:outline-none"
               >
                 {homes.map((h) => (
-                  <option key={h.id} value={h.id}>
+                  <option key={h.id} value={h.id} className="tw:bg-[#1a0f2e]">
                     {h.address}{h.isPrimary ? ' (primary)' : ''}
                   </option>
                 ))}
               </select>
+            ) : (
+              <h1 className="tw:text-2xl tw:font-bold tw:text-[#f0e6ff]">
+                {activeHome?.address ?? 'Home Maintenance'}
+              </h1>
             )}
           </div>
           <div className="tw:flex tw:gap-2">
