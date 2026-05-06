@@ -39,8 +39,8 @@ export default function HomeDetailPage() {
 
       <HomeDetails home={home} />
       
-      <div className="tw:bg-surface tw:rounded-lg tw:border tw:border-purple">
-        <div className="tw:flex tw:items-center tw:justify-between tw:px-5 tw:py-4 tw:border-b tw:border-purple">
+      <div className="tw:bg-surface tw:rounded-lg tw:border tw:border-purpleBorder">
+        <div className="tw:flex tw:items-center tw:justify-between tw:px-5 tw:py-4 tw:border-b tw:border-purpleBorder">
           <h2 className="tw:font-semibold tw:text-primary">Tasks</h2>
           <Button text="+ Add task" color='purple' onClick={() => setShowAddTask(true)} last />
         </div>

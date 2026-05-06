@@ -32,7 +32,7 @@ const HomeDetails: FC<Props> = ({ home }) => {
   };
 
   return (
-    <div className="tw:bg-surface tw:rounded-lg tw:border tw:border-purple tw:p-5 tw:mb-6">
+    <div className="tw:bg-surface tw:rounded-lg tw:border tw:border-purpleBorder tw:p-5 tw:mb-6">
       <div className="tw:flex tw:items-start tw:justify-between tw:mb-3">
         <h1 className="tw:text-xl tw:font-bold tw:text-primary">{home.address}</h1>
         <div className="tw:flex">
@@ -53,7 +53,7 @@ const HomeDetails: FC<Props> = ({ home }) => {
       <InlineField label="Notes" value={home.notes} onSave={(v) => handleUpdateHome('notes', v)} placeholder="None" />
 
       {Object.keys(customData).length > 0 && (
-        <div className="tw:mt-3 tw:pt-3 tw:border-t tw:border-purpleAlpha">
+        <div className="tw:mt-3 tw:pt-3 tw:border-t tw:border-purpleFaint">
           {Object.entries(customData).map(([key, val]) => (
             <div key={key} className="tw:flex tw:gap-3 tw:py-0.5">
               <span className="tw:text-sm tw:text-muted tw:w-28 tw:shrink-0">{key}</span>

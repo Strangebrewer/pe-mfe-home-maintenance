@@ -151,7 +151,7 @@ export default function MainPage() {
             <button
               key={v.id}
               onClick={() => navigate(`/home-maintenance/vehicles/${v.id}`)}
-              className="tw:bg-[#1a0f2e] tw:border tw:border-[rgba(188,19,254,0.3)] tw:rounded-lg tw:px-4 tw:py-3 tw:text-left tw:hover:border-[#BC13FE] tw:hover:bg-[rgba(188,19,254,0.08)] tw:hover:[box-shadow:0_0_10px_rgba(0,229,255,0.2)] tw:transition-all"
+              className="tw:bg-surface tw:border tw:border-purpleBorder tw:rounded-lg tw:px-4 tw:py-3 tw:text-left tw:hover:border-purple tw:hover:bg-purpleFaint tw:hover:shadow-[0_0_10px] tw:hover:shadow-blueBorder tw:transition-all"
             >
               <div className="tw:flex tw:items-center tw:justify-between">
                 <span className="tw:font-medium tw:text-[#f0e6ff]">{v.year} {v.make} {v.model}</span>

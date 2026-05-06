@@ -27,7 +27,7 @@ const TaskRow: FC<Props> = ({ task, onLog, onDelete }) => {
   const { label: dueLabel, cls: dueClass } = getDueInfo(task);
 
   return (
-    <div className="tw:border-b tw:border-purpleAlpha tw:last:border-b-0">
+    <div className="tw:border-b tw:border-purpleFaint tw:last:border-b-0">
       <div className="tw:flex tw:items-center tw:gap-3 tw:px-5 tw:py-3">
         <ActionButton
           iconClass={expanded ? "fas fa-caret-down" : "fas fa-caret-right"}
@@ -59,7 +59,7 @@ const TaskRow: FC<Props> = ({ task, onLog, onDelete }) => {
       </div>
 
       {expanded && (
-        <div className="tw:px-5 tw:pb-4 tw:pt-1 tw:border-t tw:border-purpleAlpha">
+        <div className="tw:px-5 tw:pb-4 tw:pt-1 tw:border-t tw:border-purpleFaint">
           <InlineField
             label="Name"
             value={task.name}
