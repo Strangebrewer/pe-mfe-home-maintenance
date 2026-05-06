@@ -62,12 +62,12 @@ export default function MainPage() {
           </div>
           <div className="tw:flex tw:gap-2">
             {activeHome && !activeHome.isPrimary && (
-              <GhostButton last color="violet" text="Set as primary" onClick={() => setPrimary.mutate(activeHome.id)}/>
+              <GhostButton last color="purple" text="Set as primary" onClick={() => setPrimary.mutate(activeHome.id)}/>
             )}
             {activeHome && (
-              <GhostButton last color="cyan" text="Manage home →" onClick={() => navigate(`/home-maintenance/homes/${activeHome.id}`)} />
+              <GhostButton last color="blue" text="Manage home →" onClick={() => navigate(`/home-maintenance/homes/${activeHome.id}`)} />
             )}
-            <Button last variant='purple' text="+ Add home" onClick={() => setShowAddHome(true)} />
+            <Button last color='purple' text="+ Add home" onClick={() => setShowAddHome(true)} />
           </div>
         </div>
 
@@ -139,7 +139,7 @@ export default function MainPage() {
       <div>
         <div className="tw:flex tw:items-center tw:justify-between tw:mb-4">
           <h2 className="tw:text-xl tw:font-bold tw:text-[#f0e6ff]">Vehicles</h2>
-          <Button last text="+ Add vehicle" variant='purple' onClick={() => setShowAddVehicle(true)}/>
+          <Button last text="+ Add vehicle" color='purple' onClick={() => setShowAddVehicle(true)}/>
         </div>
 
         {vehiclesPending && <p className="tw:text-[#c4b5fd]">Loading...</p>}

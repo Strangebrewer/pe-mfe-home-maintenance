@@ -89,7 +89,7 @@ export default function VehicleDetailPage() {
       <div className="tw:bg-[#1a0f2e] tw:rounded-lg tw:border tw:border-[rgba(188,19,254,0.3)]">
         <div className="tw:flex tw:items-center tw:justify-between tw:px-5 tw:py-4 tw:border-b tw:border-[rgba(188,19,254,0.2)]">
           <h2 className="tw:font-semibold tw:text-[#f0e6ff]">Service Records</h2>
-          <Button last text="+ Add record" variant='purple' onClick={() => setShowAddRecord(true)} />
+          <Button last text="+ Add record" color='purple' onClick={() => setShowAddRecord(true)} />
         </div>
 
         {sortedRecords.length === 0 && (
