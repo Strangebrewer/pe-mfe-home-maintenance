@@ -12,21 +12,27 @@ export const GET_HOME_TASKS = `
   }
 `;
 
-export const makeCreateHomeTask = (frequency: HomeTaskFrequency) => `
-  mutation CreateHomeTask($homeId: String!, $name: String!, $description: String) {
-    createHomeTask(homeId: $homeId, name: $name, frequency: ${frequency.toUpperCase()}, description: $description) {
-      ${TASK_FIELDS}
+export const buildCreateHomeTask = (frequency: HomeTaskFrequency) => {
+  const freq = frequency.toUpperCase();
+  return `
+    mutation CreateHomeTask($homeId: String!, $name: String!, $description: String) {
+      createHomeTask(homeId: $homeId, name: $name, frequency: ${freq}, description: $description) {
+        ${TASK_FIELDS}
+      }
     }
-  }
-`;
+  `;
+};
 
-export const makeUpdateHomeTask = (frequency?: HomeTaskFrequency) => `
-  mutation UpdateHomeTask($id: String!, $name: String, $description: String) {
-    updateHomeTask(id: $id, ${frequency ? `frequency: ${frequency.toUpperCase()}, ` : ''}name: $name, description: $description) {
-      ${TASK_FIELDS}
+export const buildUpdateHomeTask = (frequency?: HomeTaskFrequency) => {
+  const freq = frequency ? `frequency: ${frequency.toUpperCase()}, ` : '';
+  return `
+    mutation UpdateHomeTask($id: String!, $name: String, $description: String) {
+      updateHomeTask(id: $id, ${freq}name: $name, description: $description) {
+        ${TASK_FIELDS}
+      }
     }
-  }
-`;
+  `;
+};
 
 export const DELETE_HOME_TASK = `
   mutation DeleteHomeTask($id: String!) {

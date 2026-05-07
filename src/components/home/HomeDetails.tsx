@@ -1,15 +1,15 @@
-import { FC, useState } from "react";
+import { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GhostButton } from '@bka-stuff/pe-mfe-utils';
-import { Home } from "../../types/homeMaintenance";
-import InlineField from "../InlineField";
-import { useDeleteHome, useUpdateHome } from "../../gql/hooks/homeHooks";
-import CustomDataModal from "./modals/CustomDataModal";
-import DeleteConfirmationModal from "../DeleteConfirmationModal";
+import { Home } from '../../types/homeMaintenance';
+import InlineField from '../InlineField';
+import { useDeleteHome, useUpdateHome } from '../../gql/hooks/homeHooks';
+import CustomDataModal from './modals/CustomDataModal';
+import DeleteConfirmationModal from '../DeleteConfirmationModal';
 
 type Props = {
   home: Home;
-}
+};
 
 const HomeDetails: FC<Props> = ({ home }) => {
   const navigate = useNavigate();
@@ -23,7 +23,11 @@ const HomeDetails: FC<Props> = ({ home }) => {
 
   const handleUpdateHome = (field: string, raw: string) => {
     const numericFields = ['yearBuilt', 'sqFootage'];
-    const value = numericFields.includes(field) ? (raw ? Number(raw) : undefined) : (raw || undefined);
+    const value = numericFields.includes(field)
+      ? raw
+        ? Number(raw)
+        : undefined
+      : raw || undefined;
     updateHome({ id: home.id, [field]: value });
   };
 
@@ -38,19 +42,35 @@ const HomeDetails: FC<Props> = ({ home }) => {
         <div className="tw:flex">
           <GhostButton text="Custom data" color="purple" onClick={() => setShowCustomData(true)} />
 
-          <GhostButton
-            text="Delete"
-            color="red"
-            onClick={() => setConfirmDeleteHome(true)}
-            last
-          />
+          <GhostButton text="Delete" color="red" onClick={() => setConfirmDeleteHome(true)} last />
         </div>
       </div>
 
-      <InlineField label="Address" value={home.address} onSave={(v) => handleUpdateHome('address', v)} />
-      <InlineField label="Year built" value={home.yearBuilt} type="number" onSave={(v) => handleUpdateHome('yearBuilt', v)} placeholder="Not set" />
-      <InlineField label="Sq footage" value={home.sqFootage} type="number" onSave={(v) => handleUpdateHome('sqFootage', v)} placeholder="Not set" />
-      <InlineField label="Notes" value={home.notes} onSave={(v) => handleUpdateHome('notes', v)} placeholder="None" />
+      <InlineField
+        label="Address"
+        value={home.address}
+        onSave={(v) => handleUpdateHome('address', v)}
+      />
+      <InlineField
+        label="Year built"
+        value={home.yearBuilt}
+        type="number"
+        onSave={(v) => handleUpdateHome('yearBuilt', v)}
+        placeholder="Not set"
+      />
+      <InlineField
+        label="Sq footage"
+        value={home.sqFootage}
+        type="number"
+        onSave={(v) => handleUpdateHome('sqFootage', v)}
+        placeholder="Not set"
+      />
+      <InlineField
+        label="Notes"
+        value={home.notes}
+        onSave={(v) => handleUpdateHome('notes', v)}
+        placeholder="None"
+      />
 
       {Object.keys(customData).length > 0 && (
         <div className="tw:mt-3 tw:pt-3 tw:border-t tw:border-purpleFaint">

@@ -1,19 +1,32 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { gqlRequest } from '../../utils/graphqlClient';
-import { CREATE_VEHICLE, DELETE_VEHICLE, GET_VEHICLE, GET_VEHICLES, UPDATE_VEHICLE } from '../queries/vehicles';
+import {
+  CREATE_VEHICLE,
+  DELETE_VEHICLE,
+  GET_VEHICLE,
+  GET_VEHICLES,
+  UPDATE_VEHICLE,
+} from '../queries/vehicles';
 import type { Vehicle } from '../../types/homeMaintenance';
 
 export const useGetVehicles = () => {
   return useQuery({
     queryKey: ['get-vehicles'],
-    queryFn: () => gqlRequest(GET_VEHICLES).then((data) => data.getVehicles as Vehicle[]),
+    queryFn: async () => {
+      const response = await gqlRequest(GET_VEHICLES);
+      return response.getVehicles as Vehicle[];
+    },
   });
 };
 
 export const useGetVehicle = (id: string) => {
   return useQuery({
     queryKey: ['get-vehicle', id],
-    queryFn: () => gqlRequest<{ getVehicle: Vehicle }>(GET_VEHICLE, { id }).then((data) => data.getVehicle),
+    queryFn: async () => {
+      type ReturnType = { getVehicle: Vehicle };
+      const response = await gqlRequest<ReturnType>(GET_VEHICLE, { id });
+      return response.getVehicle;
+    },
     enabled: !!id,
   });
 };
@@ -21,8 +34,11 @@ export const useGetVehicle = (id: string) => {
 export const useCreateVehicle = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (variables: Omit<Vehicle, 'id'>) =>
-      gqlRequest<{ createVehicle: Vehicle }>(CREATE_VEHICLE, variables).then((data) => data.createVehicle),
+    mutationFn: async (variables: Omit<Vehicle, 'id'>) => {
+      type ReturnType = { createVehicle: Vehicle };
+      const response = await gqlRequest<ReturnType>(CREATE_VEHICLE, variables);
+      return response?.createVehicle;
+    },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['get-vehicles'] }),
   });
 };
@@ -30,8 +46,11 @@ export const useCreateVehicle = () => {
 export const useUpdateVehicle = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, ...rest }: Partial<Vehicle> & { id: string }) =>
-      gqlRequest<{ updateVehicle: Vehicle }>(UPDATE_VEHICLE, { id, ...rest }).then((data) => data.updateVehicle),
+    mutationFn: async ({ id, ...rest }: Partial<Vehicle> & { id: string }) => {
+      type ReturnType = { updateVehicle: Vehicle };
+      const response = await gqlRequest<ReturnType>(UPDATE_VEHICLE, { id, ...rest });
+      return response?.updateVehicle;
+    },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['get-vehicles'] });
       queryClient.invalidateQueries({ queryKey: ['get-vehicle', data.id] });
@@ -42,8 +61,10 @@ export const useUpdateVehicle = () => {
 export const useDeleteVehicle = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) =>
-      gqlRequest(DELETE_VEHICLE, { id }).then((data) => data.deleteVehicle),
+    mutationFn: async (id: string) => {
+      const response = await gqlRequest(DELETE_VEHICLE, { id });
+      return response?.deleteVehicle;
+    },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['get-vehicles'] }),
   });
 };

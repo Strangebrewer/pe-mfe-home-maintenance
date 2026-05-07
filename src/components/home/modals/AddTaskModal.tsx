@@ -1,4 +1,12 @@
-import { Modal, Label, Input, Select, Button, GhostButton, Textarea } from '@bka-stuff/pe-mfe-utils';
+import {
+  Modal,
+  Label,
+  Input,
+  Select,
+  Button,
+  GhostButton,
+  Textarea,
+} from '@bka-stuff/pe-mfe-utils';
 import { FC, useState } from 'react';
 import { HomeTaskFrequency } from '../../../types/homeMaintenance';
 import { FREQUENCY_LABELS } from '../../../utils/taskUtils';
@@ -8,7 +16,7 @@ type Props = {
   isOpen: boolean;
   onClose: () => void;
   homeId: string;
-}
+};
 
 const AddTaskModal: FC<Props> = ({ isOpen, onClose, homeId }) => {
   const [name, setName] = useState('');
@@ -30,15 +38,19 @@ const AddTaskModal: FC<Props> = ({ isOpen, onClose, homeId }) => {
 
   return (
     <Modal isOpen={isOpen} close={onClose}>
-      <form onSubmit={handleSubmit} className="tw:flex tw:flex-col tw:gap-4 tw:py-[32px] tw:px-[48px]">
-        <h1 className='tw:text-center tw:text-[24px]'>Add Task</h1>
+      <form
+        onSubmit={handleSubmit}
+        className="tw:flex tw:flex-col tw:gap-4 tw:py-[32px] tw:px-[48px]"
+      >
+        <h1 className="tw:text-center tw:text-[24px]">Add Task</h1>
         <div>
           <Label text="Name *" />
           <Input
             type="text"
             name="name"
             value={name}
-            onChange={(e) => setName(e.target.value)} required
+            onChange={(e) => setName(e.target.value)}
+            required
             full
           />
         </div>
@@ -52,7 +64,9 @@ const AddTaskModal: FC<Props> = ({ isOpen, onClose, homeId }) => {
             full
           >
             {Object.values(HomeTaskFrequency).map((f) => (
-              <option key={f} value={f}>{FREQUENCY_LABELS[f]}</option>
+              <option key={f} value={f}>
+                {FREQUENCY_LABELS[f]}
+              </option>
             ))}
           </Select>
         </div>
@@ -71,7 +85,7 @@ const AddTaskModal: FC<Props> = ({ isOpen, onClose, homeId }) => {
           <GhostButton text="Cancel" color="red" onClick={onClose} />
           <Button
             text={isPending ? 'Saving...' : 'Add Task'}
-            color='green'
+            color="green"
             onClick={handleSubmit}
             disabled={isPending}
             last

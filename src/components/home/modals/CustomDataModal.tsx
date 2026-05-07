@@ -24,7 +24,7 @@ const CustomDataModal: FC<Props> = ({ isOpen, onClose, homeId, customData }) => 
 
   function addRow(e: any) {
     e.preventDefault();
-    setRows((r: any) => [...r, { key: '', value: '' }])
+    setRows((r: any) => [...r, { key: '', value: '' }]);
   }
   const removeRow = (i: number) => setRows((r) => r.filter((_, idx) => idx !== i));
   const updateRow = (i: number, field: 'key' | 'value', val: string) =>
@@ -33,27 +33,46 @@ const CustomDataModal: FC<Props> = ({ isOpen, onClose, homeId, customData }) => 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const data: Record<string, string> = {};
-    rows.filter((r) => r.key.trim()).forEach((r) => { data[r.key.trim()] = r.value; });
+    rows
+      .filter((r) => r.key.trim())
+      .forEach((r) => {
+        data[r.key.trim()] = r.value;
+      });
     updateHome({ id: homeId, customData: JSON.stringify(data) }, { onSuccess: onClose });
   };
 
   return (
     <Modal isOpen={isOpen} close={onClose}>
-      <form onSubmit={handleSubmit} className="tw:flex tw:flex-col tw:gap-4 tw:py-[32px] tw:px-[48px]">
+      <form
+        onSubmit={handleSubmit}
+        className="tw:flex tw:flex-col tw:gap-4 tw:py-[32px] tw:px-[48px]"
+      >
         <h1 className="tw:text-center tw:text-[24px]">Custom Data</h1>
         <div className="tw:flex tw:flex-col tw:gap-2">
           {rows.map((row, i) => (
             <div key={i} className="tw:flex tw:gap-2 tw:items-center">
               <div className="tw:flex-1">
-                <Input type="text" name={`key-${i}`} value={row.key} onChange={(e) => updateRow(i, 'key', e.target.value)} full />
+                <Input
+                  type="text"
+                  name={`key-${i}`}
+                  value={row.key}
+                  onChange={(e) => updateRow(i, 'key', e.target.value)}
+                  full
+                />
               </div>
               <div className="tw:flex-1">
-                <Input type="text" name={`value-${i}`} value={row.value} onChange={(e) => updateRow(i, 'value', e.target.value)} full />
+                <Input
+                  type="text"
+                  name={`value-${i}`}
+                  value={row.value}
+                  onChange={(e) => updateRow(i, 'value', e.target.value)}
+                  full
+                />
               </div>
               <button
                 type="button"
                 onClick={() => removeRow(i)}
-                className="tw:text-[#e22c5a] tw:hover:text-white tw:text-lg tw:leading-none"
+                className="tw:text-red tw:hover:text-white tw:text-lg tw:leading-none"
               >
                 ×
               </button>

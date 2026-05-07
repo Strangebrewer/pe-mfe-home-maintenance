@@ -77,7 +77,7 @@ export const makeCreateHomeTask = (frequency: HomeTaskFrequency) => `
 
 ### Hook patterns
 - `useUpdateHomeTask` strips `homeId` from mutation variables (not a valid update arg), uses it only for `makeUpdateHomeTask` cache key
-- `useCreateHomeCompletion` strips `homeId` before sending, uses it to invalidate `['get-home-tasks', homeId]`
+- `useCreateHomeCompletion` — `homeId` is not in the input type; invalidates `['get-home-tasks', data.homeId]` using the value returned from the server
 - `useUpdateServiceRecord` strips `vehicleId` before sending
 - `useDeleteServiceRecord(vehicleId)` — vehicleId passed at hook initialization for cache invalidation
 

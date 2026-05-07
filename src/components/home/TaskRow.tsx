@@ -13,11 +13,12 @@ type Props = {
 
 function getDueInfo(task: HomeTask): { label: string; cls: string } {
   const days = getDaysUntilDue(task);
-  if (task.frequency === HomeTaskFrequency.AS_NEEDED) return { label: 'As needed', cls: 'tw:text-[#c4b5fd]' };
-  if (!task.lastCompletionDate) return { label: 'Never done', cls: 'tw:text-[#e22c5a]' };
-  if (days !== null && days < 0) return { label: `${Math.abs(days)}d overdue`, cls: 'tw:text-[#e22c5a]' };
-  if (days !== null && days <= 7) return { label: `Due in ${days}d`, cls: 'tw:text-[#00E5FF]' };
-  return { label: `Due in ${days}d`, cls: 'tw:text-[#c4b5fd]' };
+  if (task.frequency === HomeTaskFrequency.AS_NEEDED)
+    return { label: 'As needed', cls: 'tw:text-muted' };
+  if (!task.lastCompletionDate) return { label: 'Never done', cls: 'tw:text-red' };
+  if (days !== null && days < 0) return { label: `${Math.abs(days)}d overdue`, cls: 'tw:text-red' };
+  if (days !== null && days <= 7) return { label: `Due in ${days}d`, cls: 'tw:text-blue' };
+  return { label: `Due in ${days}d`, cls: 'tw:text-muted' };
 }
 
 const TaskRow: FC<Props> = ({ task, onLog, onDelete }) => {
@@ -30,15 +31,19 @@ const TaskRow: FC<Props> = ({ task, onLog, onDelete }) => {
     <div className="tw:border-b tw:border-purpleFaint tw:last:border-b-0">
       <div className="tw:flex tw:items-center tw:gap-3 tw:px-5 tw:py-3">
         <ActionButton
-          iconClass={expanded ? "fas fa-caret-down" : "fas fa-caret-right"}
+          iconClass={expanded ? 'fas fa-caret-down' : 'fas fa-caret-right'}
           color="blue"
           onClick={() => setExpanded(!expanded)}
         />
         <span className="tw:flex-1 tw:min-w-0 tw:truncate tw:text-sm">{task.name}</span>
-        <span className="tw:text-xs tw:text-muted tw:shrink-0">{FREQUENCY_LABELS[task.frequency]}</span>
+        <span className="tw:text-xs tw:text-muted tw:shrink-0">
+          {FREQUENCY_LABELS[task.frequency]}
+        </span>
         <span className={`tw:text-xs tw:font-medium tw:shrink-0 ${dueClass}`}>{dueLabel}</span>
         {task.lastCompletionDate && (
-          <span className="tw:text-xs tw:text-muted tw:shrink-0">Last: {formatDate(task.lastCompletionDate)}</span>
+          <span className="tw:text-xs tw:text-muted tw:shrink-0">
+            Last: {formatDate(task.lastCompletionDate)}
+          </span>
         )}
         <div className="tw:flex tw:items-center tw:gap-2 tw:shrink-0">
           <GhostButton
@@ -69,11 +74,19 @@ const TaskRow: FC<Props> = ({ task, onLog, onDelete }) => {
             <span className="tw:text-sm tw:text-muted tw:w-28 tw:shrink-0">Frequency</span>
             <select
               value={task.frequency}
-              onChange={(e) => updateTask({ id: task.id, homeId: task.homeId, frequency: e.target.value as HomeTaskFrequency })}
+              onChange={(e) =>
+                updateTask({
+                  id: task.id,
+                  homeId: task.homeId,
+                  frequency: e.target.value as HomeTaskFrequency,
+                })
+              }
               className="tw:border tw:border-purple tw:rounded tw:text-sm tw:px-2 tw:py-1 tw:bg-bg"
             >
               {Object.values(HomeTaskFrequency).map((f) => (
-                <option key={f} value={f}>{FREQUENCY_LABELS[f]}</option>
+                <option key={f} value={f}>
+                  {FREQUENCY_LABELS[f]}
+                </option>
               ))}
             </select>
           </div>
@@ -84,7 +97,13 @@ const TaskRow: FC<Props> = ({ task, onLog, onDelete }) => {
             placeholder="None"
           />
           <div className="tw:flex tw:justify-end tw:pt-2">
-            <GhostButton text="Log" color="green" size="sm" onClick={() => onLog({ id: task.id, homeId: task.homeId, name: task.name })} last />
+            <GhostButton
+              text="Log"
+              color="green"
+              size="sm"
+              onClick={() => onLog({ id: task.id, homeId: task.homeId, name: task.name })}
+              last
+            />
           </div>
         </div>
       )}

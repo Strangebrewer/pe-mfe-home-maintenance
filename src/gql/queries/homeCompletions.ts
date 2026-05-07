@@ -1,5 +1,10 @@
 const COMPLETION_FIELDS = `
-  id homeId taskId date cost notes
+  id
+  homeId
+  taskId
+  date 
+  cost
+  notes
 `;
 
 export const GET_COMPLETIONS_BY_TASK = `

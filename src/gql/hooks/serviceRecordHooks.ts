@@ -1,13 +1,21 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { gqlRequest } from '../../utils/graphqlClient';
-import { DELETE_SERVICE_RECORD, GET_SERVICE_RECORDS, UPDATE_SERVICE_RECORD, makeCreateServiceRecord } from '../queries/serviceRecords';
+import {
+  DELETE_SERVICE_RECORD,
+  GET_SERVICE_RECORDS,
+  UPDATE_SERVICE_RECORD,
+  buildCreateServiceRecord,
+} from '../queries/serviceRecords';
 import type { ServiceRecord, ServiceRecordType } from '../../types/homeMaintenance';
 
 export const useGetServiceRecords = (vehicleId: string | undefined) => {
   return useQuery({
     queryKey: ['get-service-records', vehicleId],
-    queryFn: () =>
-      gqlRequest<{ getServiceRecords: ServiceRecord[] }>(GET_SERVICE_RECORDS, { vehicleId }).then((data) => data.getServiceRecords),
+    queryFn: async () => {
+      type ReturnType = { getServiceRecords: ServiceRecord[] };
+      const response = await gqlRequest<ReturnType>(GET_SERVICE_RECORDS, { vehicleId });
+      return response.getServiceRecords;
+    },
     enabled: !!vehicleId,
   });
 };
@@ -25,9 +33,14 @@ type CreateServiceRecordInput = {
 export const useCreateServiceRecord = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ type, ...rest }: CreateServiceRecordInput) =>
-      gqlRequest<{ createServiceRecord: ServiceRecord }>(makeCreateServiceRecord(type), rest).then((data) => data.createServiceRecord),
-    onSuccess: (data) => queryClient.invalidateQueries({ queryKey: ['get-service-records', data.vehicleId] }),
+    mutationFn: async ({ type, ...rest }: CreateServiceRecordInput) => {
+      type ReturnType = { createServiceRecord: ServiceRecord };
+      const query = buildCreateServiceRecord(type);
+      const response = await gqlRequest<ReturnType>(query, rest);
+      return response?.createServiceRecord;
+    },
+    onSuccess: (data) =>
+      queryClient.invalidateQueries({ queryKey: ['get-service-records', data.vehicleId] }),
   });
 };
 
@@ -44,17 +57,24 @@ type UpdateServiceRecordInput = {
 export const useUpdateServiceRecord = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ vehicleId: _, ...rest }: UpdateServiceRecordInput) =>
-      gqlRequest<{ updateServiceRecord: ServiceRecord }>(UPDATE_SERVICE_RECORD, rest).then((data) => data.updateServiceRecord),
-    onSuccess: (data) => queryClient.invalidateQueries({ queryKey: ['get-service-records', data.vehicleId] }),
+    mutationFn: async ({ vehicleId: _, ...rest }: UpdateServiceRecordInput) => {
+      type ReturnType = { updateServiceRecord: ServiceRecord };
+      const response = await gqlRequest<ReturnType>(UPDATE_SERVICE_RECORD, rest);
+      return response?.updateServiceRecord;
+    },
+    onSuccess: (data) =>
+      queryClient.invalidateQueries({ queryKey: ['get-service-records', data.vehicleId] }),
   });
 };
 
 export const useDeleteServiceRecord = (vehicleId: string) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) =>
-      gqlRequest(DELETE_SERVICE_RECORD, { id }).then((data) => data.deleteServiceRecord),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['get-service-records', vehicleId] }),
+    mutationFn: async (id: string) => {
+      const response = await gqlRequest(DELETE_SERVICE_RECORD, { id });
+      return response?.deleteServiceRecord;
+    },
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ['get-service-records', vehicleId] }),
   });
 };
