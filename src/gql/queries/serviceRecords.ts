@@ -13,8 +13,8 @@ export const GET_SERVICE_RECORDS = `
 `;
 
 export const buildCreateServiceRecord = (type: ServiceRecordType) => `
-  mutation CreateServiceRecord($id: String!, $date: String!, $mileage: Float!, $cost: Float, $name: String, $description: String) {
-    createServiceRecord(id: $id, type: ${type.toUpperCase()}, date: $date, mileage: $mileage, cost: $cost, name: $name, description: $description) {
+  mutation CreateServiceRecord($vehicleId: String!, $date: String!, $mileage: Float!, $cost: Float, $name: String, $description: String) {
+    createServiceRecord(vehicleId: $vehicleId, type: ${type.toUpperCase()}, date: $date, mileage: $mileage, cost: $cost, name: $name, description: $description) {
       ${SERVICE_RECORD_FIELDS}
     }
   }

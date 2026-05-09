@@ -15,8 +15,8 @@ export const GET_HOME_TASKS = `
 export const buildCreateHomeTask = (frequency: HomeTaskFrequency) => {
   const freq = frequency.toUpperCase();
   return `
-    mutation CreateHomeTask($id: String!, $name: String!, $description: String) {
-      createHomeTask(id: $id, name: $name, frequency: ${freq}, description: $description) {
+    mutation CreateHomeTask($homeId: String!, $name: String!, $description: String) {
+      createHomeTask(homeId: $homeId, name: $name, frequency: ${freq}, description: $description) {
         ${TASK_FIELDS}
       }
     }

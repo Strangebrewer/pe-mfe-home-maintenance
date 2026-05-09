@@ -21,7 +21,7 @@ export const useGetServiceRecords = (vehicleId: string | undefined) => {
 };
 
 type CreateServiceRecordInput = {
-  id: string;
+  vehicleId: string;
   type: ServiceRecordType;
   date: string;
   mileage: number;

@@ -33,7 +33,7 @@ const AddTaskModal: FC<Props> = ({ isOpen, onClose, homeId }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    createTask({ id: homeId, name, frequency, description }, { onSuccess: closeModal });
+    createTask({ homeId, name, frequency, description }, { onSuccess: closeModal });
   };
 
   return (

@@ -16,8 +16,8 @@ export const GET_COMPLETIONS_BY_TASK = `
 `;
 
 export const CREATE_HOME_COMPLETION = `
-  mutation CreateHomeCompletion($id: String!, $date: String!, $cost: Float, $notes: String) {
-    createHomeCompletion(id: $id, date: $date, cost: $cost, notes: $notes) {
+  mutation CreateHomeCompletion($taskId: String!, $date: String!, $cost: Float, $notes: String) {
+    createHomeCompletion(taskId: $taskId, date: $date, cost: $cost, notes: $notes) {
       ${COMPLETION_FIELDS}
     }
   }

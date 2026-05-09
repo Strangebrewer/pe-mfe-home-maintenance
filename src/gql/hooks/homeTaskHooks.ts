@@ -21,7 +21,7 @@ export const useGetHomeTasks = (homeId: string | undefined) => {
 };
 
 type CreateHomeTaskInput = {
-  id: string;
+  homeId: string;
   name: string;
   frequency: HomeTaskFrequency;
   description?: string;
