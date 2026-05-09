@@ -297,7 +297,7 @@ function AddServiceRecordModal({
   currentMileage: number;
   onClose: () => void;
   onSave: (data: {
-    vehicleId: string;
+    id: string;
     type: ServiceRecordType;
     date: string;
     mileage: number;
@@ -317,7 +317,7 @@ function AddServiceRecordModal({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSave({
-      vehicleId,
+      id: vehicleId,
       type,
       date,
       mileage: Number(mileage),

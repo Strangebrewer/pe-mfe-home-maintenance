@@ -13,7 +13,7 @@ export const useGetHomeTasks = (homeId: string | undefined) => {
     queryKey: ['get-home-tasks', homeId],
     queryFn: async () => {
       type ReturnType = { getHomeTasks: HomeTask[] };
-      const response = await gqlRequest<ReturnType>(GET_HOME_TASKS, { homeId });
+      const response = await gqlRequest<ReturnType>(GET_HOME_TASKS, { id: homeId });
       return response.getHomeTasks;
     },
     enabled: !!homeId,
@@ -21,7 +21,7 @@ export const useGetHomeTasks = (homeId: string | undefined) => {
 };
 
 type CreateHomeTaskInput = {
-  homeId: string;
+  id: string;
   name: string;
   frequency: HomeTaskFrequency;
   description?: string;

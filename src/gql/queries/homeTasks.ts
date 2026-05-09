@@ -5,8 +5,8 @@ const TASK_FIELDS = `
 `;
 
 export const GET_HOME_TASKS = `
-  query GetHomeTasks($homeId: String!) {
-    getHomeTasks(homeId: $homeId) {
+  query GetHomeTasks($id: String!) {
+    getHomeTasks(id: $id) {
       ${TASK_FIELDS}
     }
   }
@@ -15,8 +15,8 @@ export const GET_HOME_TASKS = `
 export const buildCreateHomeTask = (frequency: HomeTaskFrequency) => {
   const freq = frequency.toUpperCase();
   return `
-    mutation CreateHomeTask($homeId: String!, $name: String!, $description: String) {
-      createHomeTask(homeId: $homeId, name: $name, frequency: ${freq}, description: $description) {
+    mutation CreateHomeTask($id: String!, $name: String!, $description: String) {
+      createHomeTask(id: $id, name: $name, frequency: ${freq}, description: $description) {
         ${TASK_FIELDS}
       }
     }

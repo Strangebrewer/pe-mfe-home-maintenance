@@ -9,12 +9,13 @@ import {
   UPDATE_HOME,
 } from '../queries/homes';
 import type { Home } from '../../types/homeMaintenance';
+import { startTrace } from '@bka-stuff/pe-mfe-utils';
 
 export const useGetHomes = () => {
   return useQuery({
     queryKey: ['get-homes'],
     queryFn: async () => {
-      const response = await gqlRequest(GET_HOMES);
+      const response = await gqlRequest(GET_HOMES, undefined);
       return response.getHomes;
     },
   });
@@ -24,8 +25,9 @@ export const useGetHome = (id: string) => {
   return useQuery({
     queryKey: ['get-home', id],
     queryFn: async () => {
+      const traceId = startTrace('Getting home');
       type ReturnType = { getHome: Home };
-      const response = await gqlRequest<ReturnType>(GET_HOME, { id });
+      const response = await gqlRequest<ReturnType>(GET_HOME, { id }, traceId);
       return response.getHome;
     },
     enabled: !!id,

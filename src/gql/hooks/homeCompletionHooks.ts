@@ -4,7 +4,7 @@ import { CREATE_HOME_COMPLETION, DELETE_HOME_COMPLETION } from '../queries/homeC
 import type { HomeCompletion } from '../../types/homeMaintenance';
 
 type CreateCompletionInput = {
-  taskId: string;
+  id: string;
   date: string;
   cost?: number;
   notes?: string;

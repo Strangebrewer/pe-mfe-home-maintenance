@@ -8,16 +8,16 @@ const COMPLETION_FIELDS = `
 `;
 
 export const GET_COMPLETIONS_BY_TASK = `
-  query GetHomeCompletionsByTask($taskId: String!) {
-    getHomeCompletionsByTask(taskId: $taskId) {
+  query GetHomeCompletionsByTask($id: String!) {
+    getHomeCompletionsByTask(id: $id) {
       ${COMPLETION_FIELDS}
     }
   }
 `;
 
 export const CREATE_HOME_COMPLETION = `
-  mutation CreateHomeCompletion($taskId: String!, $date: String!, $cost: Float, $notes: String) {
-    createHomeCompletion(taskId: $taskId, date: $date, cost: $cost, notes: $notes) {
+  mutation CreateHomeCompletion($id: String!, $date: String!, $cost: Float, $notes: String) {
+    createHomeCompletion(id: $id, date: $date, cost: $cost, notes: $notes) {
       ${COMPLETION_FIELDS}
     }
   }

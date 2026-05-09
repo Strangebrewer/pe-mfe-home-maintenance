@@ -17,8 +17,7 @@ const LogCompletionModalNew: FC<Props> = ({ isOpen, onClose, logTaskId }) => {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const taskCompletion = {
-      taskId: logTaskId?.id,
-      homeId: logTaskId?.homeId,
+      id: logTaskId?.id,
       cost: cost ? Number(cost) : undefined,
       date,
       notes,

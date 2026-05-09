@@ -13,7 +13,7 @@ export const useGetServiceRecords = (vehicleId: string | undefined) => {
     queryKey: ['get-service-records', vehicleId],
     queryFn: async () => {
       type ReturnType = { getServiceRecords: ServiceRecord[] };
-      const response = await gqlRequest<ReturnType>(GET_SERVICE_RECORDS, { vehicleId });
+      const response = await gqlRequest<ReturnType>(GET_SERVICE_RECORDS, { id: vehicleId });
       return response.getServiceRecords;
     },
     enabled: !!vehicleId,
@@ -21,7 +21,7 @@ export const useGetServiceRecords = (vehicleId: string | undefined) => {
 };
 
 type CreateServiceRecordInput = {
-  vehicleId: string;
+  id: string;
   type: ServiceRecordType;
   date: string;
   mileage: number;
