@@ -75,6 +75,8 @@ export const makeCreateHomeTask = (frequency: HomeTaskFrequency) => `
 
 `getNextDueDate` / `getDaysUntilDue` use `FREQUENCY_DAYS` map (MONTHLY=30, SEASONAL=90, BI_ANNUAL=180, ANNUAL=365, AS_NEEDED=null).
 
+Task status color coding: never-done or overdue → `tw:text-red`; due within 7 days → `tw:text-blue`; as-needed or not due soon → `tw:text-muted`.
+
 ### Hook patterns
 - `useUpdateHomeTask` strips `homeId` from mutation variables (not a valid update arg), uses it only for `makeUpdateHomeTask` cache key
 - `useCreateHomeCompletion` — `homeId` is not in the input type; invalidates `['get-home-tasks', data.homeId]` using the value returned from the server
