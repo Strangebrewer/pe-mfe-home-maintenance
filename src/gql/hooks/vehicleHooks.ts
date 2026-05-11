@@ -34,9 +34,9 @@ export const useGetVehicle = (id: string) => {
 export const useCreateVehicle = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (variables: Omit<Vehicle, 'id'>) => {
+    mutationFn: async (input: Omit<Vehicle, 'id'>) => {
       type ReturnType = { createVehicle: Vehicle };
-      const response = await gqlRequest<ReturnType>(CREATE_VEHICLE, variables);
+      const response = await gqlRequest<ReturnType>(CREATE_VEHICLE, { input });
       return response?.createVehicle;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['get-vehicles'] }),
@@ -46,9 +46,9 @@ export const useCreateVehicle = () => {
 export const useUpdateVehicle = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, ...rest }: Partial<Vehicle> & { id: string }) => {
+    mutationFn: async ({ id, ...input }: Partial<Vehicle> & { id: string }) => {
       type ReturnType = { updateVehicle: Vehicle };
-      const response = await gqlRequest<ReturnType>(UPDATE_VEHICLE, { id, ...rest });
+      const response = await gqlRequest<ReturnType>(UPDATE_VEHICLE, { id, input });
       return response?.updateVehicle;
     },
     onSuccess: (data) => {

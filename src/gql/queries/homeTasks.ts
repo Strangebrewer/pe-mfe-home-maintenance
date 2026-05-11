@@ -1,5 +1,3 @@
-import { HomeTaskFrequency } from '../../types/homeMaintenance';
-
 const TASK_FIELDS = `
   id homeId name frequency description lastCompletionDate
 `;
@@ -12,27 +10,21 @@ export const GET_HOME_TASKS = `
   }
 `;
 
-export const buildCreateHomeTask = (frequency: HomeTaskFrequency) => {
-  const freq = frequency.toUpperCase();
-  return `
-    mutation CreateHomeTask($homeId: String!, $name: String!, $description: String) {
-      createHomeTask(homeId: $homeId, name: $name, frequency: ${freq}, description: $description) {
-        ${TASK_FIELDS}
-      }
+export const CREATE_HOME_TASK = `
+  mutation CreateHomeTask($input: CreateHomeTaskInput!) {
+    createHomeTask(input: $input) {
+      ${TASK_FIELDS}
     }
-  `;
-};
+  }
+`;
 
-export const buildUpdateHomeTask = (frequency?: HomeTaskFrequency) => {
-  const freq = frequency ? `frequency: ${frequency.toUpperCase()}, ` : '';
-  return `
-    mutation UpdateHomeTask($id: String!, $name: String, $description: String) {
-      updateHomeTask(id: $id, ${freq}name: $name, description: $description) {
-        ${TASK_FIELDS}
-      }
+export const UPDATE_HOME_TASK = `
+  mutation UpdateHomeTask($id: String!, $input: UpdateHomeTaskInput!) {
+    updateHomeTask(id: $id, input: $input) {
+      ${TASK_FIELDS}
     }
-  `;
-};
+  }
+`;
 
 export const DELETE_HOME_TASK = `
   mutation DeleteHomeTask($id: String!) {

@@ -1,10 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { gqlRequest } from '../../utils/graphqlClient';
 import {
+  CREATE_HOME_TASK,
   DELETE_HOME_TASK,
   GET_HOME_TASKS,
-  buildCreateHomeTask,
-  buildUpdateHomeTask,
+  UPDATE_HOME_TASK,
 } from '../queries/homeTasks';
 import type { HomeTask, HomeTaskFrequency } from '../../types/homeMaintenance';
 
@@ -30,10 +30,9 @@ type CreateHomeTaskInput = {
 export const useCreateHomeTask = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ frequency, ...rest }: CreateHomeTaskInput) => {
+    mutationFn: async (input: CreateHomeTaskInput) => {
       type ReturnType = { createHomeTask: HomeTask };
-      const query = buildCreateHomeTask(frequency);
-      const response = await gqlRequest<ReturnType>(query, rest);
+      const response = await gqlRequest<ReturnType>(CREATE_HOME_TASK, { input });
       return response?.createHomeTask;
     },
     onSuccess: (data) =>
@@ -52,10 +51,9 @@ type UpdateHomeTaskInput = {
 export const useUpdateHomeTask = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, homeId: _, frequency, ...rest }: UpdateHomeTaskInput) => {
+    mutationFn: async ({ id, homeId, ...input }: UpdateHomeTaskInput) => {
       type ReturnType = { updateHomeTask: HomeTask };
-      const query = buildUpdateHomeTask(frequency);
-      const response = await gqlRequest<ReturnType>(query, { id, ...rest });
+      const response = await gqlRequest<ReturnType>(UPDATE_HOME_TASK, { id, input });
       return response?.updateHomeTask;
     },
     onSuccess: (data) =>

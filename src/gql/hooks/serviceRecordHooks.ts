@@ -1,10 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { gqlRequest } from '../../utils/graphqlClient';
 import {
+  CREATE_SERVICE_RECORD,
   DELETE_SERVICE_RECORD,
   GET_SERVICE_RECORDS,
   UPDATE_SERVICE_RECORD,
-  buildCreateServiceRecord,
 } from '../queries/serviceRecords';
 import type { ServiceRecord, ServiceRecordType } from '../../types/homeMaintenance';
 
@@ -33,10 +33,9 @@ type CreateServiceRecordInput = {
 export const useCreateServiceRecord = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ type, ...rest }: CreateServiceRecordInput) => {
+    mutationFn: async (input: CreateServiceRecordInput) => {
       type ReturnType = { createServiceRecord: ServiceRecord };
-      const query = buildCreateServiceRecord(type);
-      const response = await gqlRequest<ReturnType>(query, rest);
+      const response = await gqlRequest<ReturnType>(CREATE_SERVICE_RECORD, { input });
       return response?.createServiceRecord;
     },
     onSuccess: (data) =>
@@ -57,9 +56,9 @@ type UpdateServiceRecordInput = {
 export const useUpdateServiceRecord = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ vehicleId: _, ...rest }: UpdateServiceRecordInput) => {
+    mutationFn: async ({ id, vehicleId, ...input }: UpdateServiceRecordInput) => {
       type ReturnType = { updateServiceRecord: ServiceRecord };
-      const response = await gqlRequest<ReturnType>(UPDATE_SERVICE_RECORD, rest);
+      const response = await gqlRequest<ReturnType>(UPDATE_SERVICE_RECORD, { id, input });
       return response?.updateServiceRecord;
     },
     onSuccess: (data) =>

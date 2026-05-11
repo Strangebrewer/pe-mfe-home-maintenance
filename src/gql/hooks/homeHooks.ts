@@ -37,9 +37,9 @@ export const useGetHome = (id: string) => {
 export const useCreateHome = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (variables: Omit<Home, 'id' | 'isPrimary'>) => {
+    mutationFn: async (input: Omit<Home, 'id' | 'isPrimary'>) => {
       type ReturnType = { createHome: Home };
-      const response = await gqlRequest<ReturnType>(CREATE_HOME, variables);
+      const response = await gqlRequest<ReturnType>(CREATE_HOME, { input });
       return response?.createHome;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['get-homes'] }),
@@ -49,9 +49,9 @@ export const useCreateHome = () => {
 export const useUpdateHome = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, ...rest }: Partial<Home> & { id: string }) => {
+    mutationFn: async ({ id, isPrimary, ...input }: Partial<Home> & { id: string; isPrimary?: boolean }) => {
       type ReturnType = { updateHome: Home };
-      const response = await gqlRequest<ReturnType>(UPDATE_HOME, { id, ...rest });
+      const response = await gqlRequest<ReturnType>(UPDATE_HOME, { id, input });
       return response?.updateHome;
     },
     onSuccess: (data) => {

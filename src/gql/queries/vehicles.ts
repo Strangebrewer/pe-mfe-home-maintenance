@@ -19,16 +19,16 @@ export const GET_VEHICLE = `
 `;
 
 export const CREATE_VEHICLE = `
-  mutation CreateVehicle($year: Float!, $make: String!, $model: String!, $mileage: Float!, $color: String, $trim: String, $plate: String, $vin: String, $insuranceId: String) {
-    createVehicle(year: $year, make: $make, model: $model, mileage: $mileage, color: $color, trim: $trim, plate: $plate, vin: $vin, insuranceId: $insuranceId) {
+  mutation CreateVehicle($input: CreateVehicleInput!) {
+    createVehicle(input: $input) {
       ${VEHICLE_FIELDS}
     }
   }
 `;
 
 export const UPDATE_VEHICLE = `
-  mutation UpdateVehicle($id: String!, $year: Float, $make: String, $model: String, $mileage: Float, $color: String, $trim: String, $plate: String, $vin: String, $insuranceId: String) {
-    updateVehicle(id: $id, year: $year, make: $make, model: $model, mileage: $mileage, color: $color, trim: $trim, plate: $plate, vin: $vin, insuranceId: $insuranceId) {
+  mutation UpdateVehicle($id: String!, $input: UpdateVehicleInput!) {
+    updateVehicle(id: $id, input: $input) {
       ${VEHICLE_FIELDS}
     }
   }

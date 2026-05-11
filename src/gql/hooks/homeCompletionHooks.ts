@@ -15,7 +15,7 @@ export const useCreateHomeCompletion = () => {
   return useMutation({
     mutationFn: async (input: CreateCompletionInput) => {
       type ReturnType = { createHomeCompletion: HomeCompletion };
-      const response = await gqlRequest<ReturnType>(CREATE_HOME_COMPLETION, input);
+      const response = await gqlRequest<ReturnType>(CREATE_HOME_COMPLETION, { input });
       return response?.createHomeCompletion;
     },
     onSuccess: (data) =>

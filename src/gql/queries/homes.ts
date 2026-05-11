@@ -19,16 +19,16 @@ export const GET_HOME = `
 `;
 
 export const CREATE_HOME = `
-  mutation CreateHome($address: String!, $yearBuilt: Float, $sqFootage: Float, $notes: String, $customData: String) {
-    createHome(address: $address, yearBuilt: $yearBuilt, sqFootage: $sqFootage, notes: $notes, customData: $customData) {
+  mutation CreateHome($input: CreateHomeInput!) {
+    createHome(input: $input) {
       ${HOME_FIELDS}
     }
   }
 `;
 
 export const UPDATE_HOME = `
-  mutation UpdateHome($id: String!, $address: String, $yearBuilt: Float, $sqFootage: Float, $notes: String, $customData: String) {
-    updateHome(id: $id, address: $address, yearBuilt: $yearBuilt, sqFootage: $sqFootage, notes: $notes, customData: $customData) {
+  mutation UpdateHome($id: String!, $input: UpdateHomeInput!) {
+    updateHome(id: $id, input: $input) {
       ${HOME_FIELDS}
     }
   }
