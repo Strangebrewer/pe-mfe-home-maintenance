@@ -49,19 +49,19 @@ All types defined in `src/types/homeMaintenance.ts`.
 ## Key Implementation Details
 
 ### Enum inlining
-Apollo Router rejects enum values passed as JSON variables. Query strings for mutations that include enum args are built as template functions:
+Apollo Router rejects enum values passed as JSON strings — both as top-level variables AND as fields within an InputType variable. Mutations with enum fields use builder functions that inline the enum value directly into the query string as a GraphQL literal, inside the input object:
 
 ```typescript
-export const makeCreateHomeTask = (frequency: HomeTaskFrequency) => `
-  mutation CreateHomeTask(...) {
-    createHomeTask(..., frequency: ${frequency.toUpperCase()}, ...) { ... }
+export const buildCreateHomeTask = (frequency: HomeTaskFrequency) => `
+  mutation CreateHomeTask($homeId: String!, $name: String!, $description: String) {
+    createHomeTask(input: { homeId: $homeId, name: $name, frequency: ${frequency.toUpperCase()}, description: $description }) {
+      ...
+    }
   }
 `;
 ```
 
-`frequency.toUpperCase()` converts the TypeScript enum value (e.g. `'monthly'`) to the GQL enum name (`MONTHLY`). Same pattern for `ServiceRecordType`.
-
-`makeUpdateHomeTask` is also dynamic — omits the `frequency` arg entirely if not provided, since it's optional on update.
+Non-enum fields remain as variables. The hook extracts the enum value, calls the builder, and passes the rest as variables. Same pattern for `ServiceRecordType` and for optional enums (builder omits the field entirely when not provided).
 
 ### customData editing
 `HomeDetailPage` parses `home.customData` with `JSON.parse` to display key-value pairs. A `CustomDataModal` allows adding/removing/editing rows; on save it serializes back with `JSON.stringify` and calls `updateHome`.

@@ -1,3 +1,5 @@
+import { ServiceRecordType } from '../../types/homeMaintenance';
+
 const SERVICE_RECORD_FIELDS = `
   id vehicleId type date mileage cost name description
 `;
@@ -10,9 +12,9 @@ export const GET_SERVICE_RECORDS = `
   }
 `;
 
-export const CREATE_SERVICE_RECORD = `
-  mutation CreateServiceRecord($input: CreateServiceRecordInput!) {
-    createServiceRecord(input: $input) {
+export const buildCreateServiceRecord = (type: ServiceRecordType) => `
+  mutation CreateServiceRecord($vehicleId: String!, $date: String!, $mileage: Float!, $cost: Float, $name: String, $description: String) {
+    createServiceRecord(input: { vehicleId: $vehicleId, type: ${type.toUpperCase()}, date: $date, mileage: $mileage, cost: $cost, name: $name, description: $description }) {
       ${SERVICE_RECORD_FIELDS}
     }
   }

@@ -1,10 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { gqlRequest } from '../../utils/graphqlClient';
 import {
-  CREATE_SERVICE_RECORD,
   DELETE_SERVICE_RECORD,
   GET_SERVICE_RECORDS,
   UPDATE_SERVICE_RECORD,
+  buildCreateServiceRecord,
 } from '../queries/serviceRecords';
 import type { ServiceRecord, ServiceRecordType } from '../../types/homeMaintenance';
 
@@ -33,9 +33,10 @@ type CreateServiceRecordInput = {
 export const useCreateServiceRecord = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (input: CreateServiceRecordInput) => {
+    mutationFn: async ({ type, ...rest }: CreateServiceRecordInput) => {
       type ReturnType = { createServiceRecord: ServiceRecord };
-      const response = await gqlRequest<ReturnType>(CREATE_SERVICE_RECORD, { input });
+      const query = buildCreateServiceRecord(type);
+      const response = await gqlRequest<ReturnType>(query, rest);
       return response?.createServiceRecord;
     },
     onSuccess: (data) =>
