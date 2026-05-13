@@ -6,8 +6,7 @@ import { sortTasksByUrgency } from '../utils/taskUtils';
 import AddTaskModal from '../components/home/modals/AddTaskModal';
 import LogCompletionModalNew from '../components/home/modals/LogCompletionModal';
 import TaskRow from '../components/home/TaskRow';
-import { Button, TransparentButton } from '@bka-stuff/pe-mfe-utils';
-import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
+import { Button, TransparentButton, DeleteConfirmationModal } from '@bka-stuff/pe-mfe-utils';
 import HomeDetails from '../components/home/HomeDetails';
 
 export default function HomeDetailPage() {

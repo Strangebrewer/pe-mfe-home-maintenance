@@ -13,7 +13,7 @@ import {
   todayISO,
 } from '../utils/taskUtils';
 import Modal from '../components/Modal';
-import { GhostButton, Button } from '@bka-stuff/pe-mfe-utils';
+import { GhostButton, Button, ItemCard } from '@bka-stuff/pe-mfe-utils';
 
 const inputCls =
   'tw:w-full tw:border tw:border-[#BC13FE] tw:rounded tw:px-3 tw:py-2 tw:text-sm tw:bg-bg tw:text-primary tw:focus:outline-none tw:focus:ring-1 tw:focus:ring-[#BC13FE]';
@@ -177,11 +177,7 @@ export default function MainPage() {
 
         <div className="tw:grid tw:gap-3">
           {vehicles?.map((v) => (
-            <button
-              key={v.id}
-              onClick={() => navigate(`/home-maintenance/vehicles/${v.id}`)}
-              className="tw:bg-surface tw:border tw:border-purpleBorder tw:rounded-lg tw:px-4 tw:py-3 tw:text-left tw:hover:border-purple tw:hover:bg-purpleFaint tw:hover:shadow-[0_0_10px] tw:hover:shadow-blueBorder tw:transition-all"
-            >
+            <ItemCard key={v.id} onClick={() => navigate(`/home-maintenance/vehicles/${v.id}`)}>
               <div className="tw:flex tw:items-center tw:justify-between">
                 <span className="tw:font-medium tw:text-primary">
                   {v.year} {v.make} {v.model}
@@ -193,7 +189,7 @@ export default function MainPage() {
                   {[v.color, v.trim].filter(Boolean).join(' · ')}
                 </span>
               )}
-            </button>
+            </ItemCard>
           ))}
         </div>
       </div>

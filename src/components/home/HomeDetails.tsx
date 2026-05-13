@@ -1,11 +1,10 @@
 import { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GhostButton } from '@bka-stuff/pe-mfe-utils';
+import { GhostButton, DeleteConfirmationModal } from '@bka-stuff/pe-mfe-utils';
 import { Home } from '../../types/homeMaintenance';
 import InlineField from '../InlineField';
 import { useDeleteHome, useUpdateHome } from '../../gql/hooks/homeHooks';
 import CustomDataModal from './modals/CustomDataModal';
-import DeleteConfirmationModal from '../DeleteConfirmationModal';
 
 type Props = {
   home: Home;
