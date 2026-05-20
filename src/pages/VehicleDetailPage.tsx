@@ -11,7 +11,7 @@ import { ServiceRecord, ServiceRecordType } from '../types/homeMaintenance';
 import { formatDate, todayISO } from '../utils/taskUtils';
 import InlineField from '../components/InlineField';
 import Modal from '../components/Modal';
-import { GhostButton, Button } from '@bka-stuff/pe-mfe-utils';
+import { ActionButton, GhostButton, Button } from '@bka-stuff/pe-mfe-utils';
 
 const SERVICE_RECORD_LABELS: Record<ServiceRecordType, string> = {
   [ServiceRecordType.OIL_CHANGE]: 'Oil Change',
@@ -167,109 +167,18 @@ export default function VehicleDetailPage() {
         )}
 
         {sortedRecords.map((record) => (
-          <div
+          <ServiceRecordRow
             key={record.id}
-            className="tw:px-5 tw:py-4 tw:border-b tw:border-purpleFaint tw:last:border-b-0"
-          >
-            <div className="tw:flex tw:items-start tw:justify-between tw:gap-3">
-              <div className="tw:flex-1 tw:min-w-0">
-                <div className="tw:flex tw:items-center tw:gap-2 tw:mb-2">
-                  <span className="tw:text-sm tw:font-medium tw:text-primary">
-                    {record.name || SERVICE_RECORD_LABELS[record.type]}
-                  </span>
-                  <span className="tw:text-xs tw:bg-[#1a0f2ecc] tw:text-muted tw:rounded tw:px-1.5 tw:py-0.5">
-                    {SERVICE_RECORD_LABELS[record.type]}
-                  </span>
-                </div>
-                <InlineField
-                  label="Date"
-                  value={record.date}
-                  onSave={(v) =>
-                    updateRecord.mutate({ id: record.id, vehicleId: vehicle.id, date: v })
-                  }
-                />
-                <InlineField
-                  label="Mileage"
-                  value={record.mileage}
-                  type="number"
-                  onSave={(v) =>
-                    updateRecord.mutate({
-                      id: record.id,
-                      vehicleId: vehicle.id,
-                      mileage: Number(v),
-                    })
-                  }
-                />
-                <InlineField
-                  label="Cost"
-                  value={record.cost}
-                  type="number"
-                  onSave={(v) =>
-                    updateRecord.mutate({
-                      id: record.id,
-                      vehicleId: vehicle.id,
-                      cost: v ? Number(v) : undefined,
-                    })
-                  }
-                  placeholder="Not set"
-                />
-                <InlineField
-                  label="Name"
-                  value={record.name}
-                  onSave={(v) =>
-                    updateRecord.mutate({
-                      id: record.id,
-                      vehicleId: vehicle.id,
-                      name: v || undefined,
-                    })
-                  }
-                  placeholder="None"
-                />
-                <InlineField
-                  label="Description"
-                  value={record.description}
-                  onSave={(v) =>
-                    updateRecord.mutate({
-                      id: record.id,
-                      vehicleId: vehicle.id,
-                      description: v || undefined,
-                    })
-                  }
-                  placeholder="None"
-                />
-              </div>
-              <div className="tw:flex tw:flex-col tw:items-end tw:gap-2 tw:shrink-0">
-                <span className="tw:text-xs tw:text-muted">{formatDate(record.date)}</span>
-                {confirmDeleteRecord === record.id ? (
-                  <div className="tw:flex tw:items-center tw:gap-1">
-                    <button
-                      onClick={() =>
-                        deleteRecord.mutate(record.id, {
-                          onSuccess: () => setConfirmDeleteRecord(null),
-                        })
-                      }
-                      className="tw:text-xs tw:text-red tw:font-medium"
-                    >
-                      Yes
-                    </button>
-                    <button
-                      onClick={() => setConfirmDeleteRecord(null)}
-                      className="tw:text-xs tw:text-muted"
-                    >
-                      No
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    onClick={() => setConfirmDeleteRecord(record.id)}
-                    className="tw:text-xs tw:text-red tw:hover:text-white"
-                  >
-                    Delete
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
+            record={record}
+            vehicleId={vehicle.id}
+            confirmDelete={confirmDeleteRecord === record.id}
+            onConfirmDelete={() => setConfirmDeleteRecord(record.id)}
+            onCancelDelete={() => setConfirmDeleteRecord(null)}
+            onDelete={() =>
+              deleteRecord.mutate(record.id, { onSuccess: () => setConfirmDeleteRecord(null) })
+            }
+            onUpdate={(fields) => updateRecord.mutate({ id: record.id, vehicleId: vehicle.id, ...fields })}
+          />
         ))}
       </div>
 
@@ -281,6 +190,102 @@ export default function VehicleDetailPage() {
           onSave={(data) => createRecord.mutate(data, { onSuccess: () => setShowAddRecord(false) })}
           isPending={createRecord.isPending}
         />
+      )}
+    </div>
+  );
+}
+
+type ServiceRecordUpdateFields = {
+  date?: string;
+  mileage?: number;
+  cost?: number;
+  name?: string;
+  description?: string;
+};
+
+function ServiceRecordRow({
+  record,
+  vehicleId: _vehicleId,
+  confirmDelete,
+  onConfirmDelete,
+  onCancelDelete,
+  onDelete,
+  onUpdate,
+}: {
+  record: ServiceRecord;
+  vehicleId: string;
+  confirmDelete: boolean;
+  onConfirmDelete: () => void;
+  onCancelDelete: () => void;
+  onDelete: () => void;
+  onUpdate: (fields: ServiceRecordUpdateFields) => void;
+}) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div className="tw:border-b tw:border-purpleFaint tw:last:border-b-0">
+      <div className="tw:flex tw:items-center tw:gap-3 tw:px-5 tw:py-3">
+        <ActionButton
+          iconClass={expanded ? 'fas fa-caret-down' : 'fas fa-caret-right'}
+          color="blue"
+          onClick={() => setExpanded(!expanded)}
+        />
+        <span className="tw:flex-1 tw:min-w-0 tw:truncate tw:text-sm">
+          {record.name || SERVICE_RECORD_LABELS[record.type]}
+        </span>
+        {record.name && (
+          <span className="tw:text-xs tw:text-muted tw:shrink-0">
+            {SERVICE_RECORD_LABELS[record.type]}
+          </span>
+        )}
+        <span className="tw:text-xs tw:text-muted tw:shrink-0">{formatDate(record.date)}</span>
+        <span className="tw:text-xs tw:text-muted tw:shrink-0">{record.mileage.toLocaleString()} mi</span>
+      </div>
+
+      {expanded && (
+        <div className="tw:px-5 tw:pb-4 tw:pt-1 tw:border-t tw:border-purpleFaint">
+          <InlineField
+            label="Date"
+            value={record.date}
+            onSave={(v) => onUpdate({ date: v })}
+          />
+          <InlineField
+            label="Mileage"
+            value={record.mileage}
+            type="number"
+            onSave={(v) => onUpdate({ mileage: Number(v) })}
+          />
+          <InlineField
+            label="Cost"
+            value={record.cost}
+            type="number"
+            onSave={(v) => onUpdate({ cost: v ? Number(v) : undefined })}
+            placeholder="Not set"
+          />
+          <InlineField
+            label="Name"
+            value={record.name}
+            onSave={(v) => onUpdate({ name: v || undefined })}
+            placeholder="None"
+          />
+          <InlineField
+            label="Description"
+            value={record.description}
+            onSave={(v) => onUpdate({ description: v || undefined })}
+            placeholder="None"
+          />
+          <div className="tw:flex tw:justify-end tw:pt-2">
+            {confirmDelete ? (
+              <div className="tw:flex tw:items-center tw:gap-2">
+                <span className="tw:text-xs tw:text-muted">Delete record?</span>
+                <button onClick={onDelete} className="tw:text-xs tw:text-red tw:font-medium">Yes</button>
+                <button onClick={onCancelDelete} className="tw:text-xs tw:text-muted">No</button>
+              </div>
+            ) : (
+              <GhostButton text="Delete" color="red" size="sm" onClick={onConfirmDelete} last />
+            )}
+          </div>
+        </div>
       )}
     </div>
   );
