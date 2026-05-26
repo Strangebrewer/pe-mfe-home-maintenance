@@ -14,9 +14,11 @@ export type Vehicle = {
 export type Home = {
   id: string;
   address: string;
+  isPrimary: boolean;
   yearBuilt?: number;
   sqFootage?: number;
   notes?: string;
+  customData?: string;
 };
 
 export type HomeTask = {
@@ -25,6 +27,7 @@ export type HomeTask = {
   name: string;
   frequency: HomeTaskFrequency;
   description?: string;
+  lastCompletionDate?: string;
 };
 
 export type HomeCompletion = {
@@ -48,15 +51,15 @@ export type ServiceRecord = {
 };
 
 export enum HomeTaskFrequency {
-  MONTHLY = 'monthly',
-  SEASONAL = 'seasonal',
-  BI_ANNUAL = 'bi_annual',
-  ANNUAL = 'annual',
-  AS_NEEDED = 'as_needed',
+  MONTHLY = 'MONTHLY',
+  SEASONAL = 'SEASONAL',
+  BI_ANNUAL = 'BI_ANNUAL',
+  ANNUAL = 'ANNUAL',
+  AS_NEEDED = 'AS_NEEDED',
 }
 
 export enum ServiceRecordType {
-  OIL_CHANGE = 'oil_change',
-  TIRE_ROTATION = 'tire_rotation',
-  SERVICE_ITEM = 'service_item',
+  OIL_CHANGE = 'OIL_CHANGE',
+  TIRE_ROTATION = 'TIRE_ROTATION',
+  SERVICE_ITEM = 'SERVICE_ITEM',
 }

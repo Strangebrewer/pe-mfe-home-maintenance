@@ -1,11 +1,85 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { gqlRequest } from '../../utils/graphqlClient';
-import { GET_HOMES } from '../queries/homes';
+import {
+  CREATE_HOME,
+  DELETE_HOME,
+  GET_HOME,
+  GET_HOMES,
+  SET_PRIMARY_HOME,
+  UPDATE_HOME,
+} from '../queries/homes';
 import type { Home } from '../../types/homeMaintenance';
+import { startTrace } from '@bka-stuff/pe-mfe-utils';
 
 export const useGetHomes = () => {
   return useQuery({
     queryKey: ['get-homes'],
-    queryFn: () => gqlRequest(GET_HOMES).then((data) => data.getHomes as Home[]),
+    queryFn: async () => {
+      const response = await gqlRequest(GET_HOMES, undefined);
+      return response.getHomes;
+    },
+  });
+};
+
+export const useGetHome = (id: string) => {
+  return useQuery({
+    queryKey: ['get-home', id],
+    queryFn: async () => {
+      const traceId = startTrace('Getting home');
+      type ReturnType = { getHome: Home };
+      const response = await gqlRequest<ReturnType>(GET_HOME, { id }, traceId);
+      return response.getHome;
+    },
+    enabled: !!id,
+  });
+};
+
+export const useCreateHome = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (input: Omit<Home, 'id' | 'isPrimary'>) => {
+      type ReturnType = { createHome: Home };
+      const response = await gqlRequest<ReturnType>(CREATE_HOME, { input });
+      return response?.createHome;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['get-homes'] }),
+  });
+};
+
+export const useUpdateHome = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, isPrimary, ...input }: Partial<Home> & { id: string; isPrimary?: boolean }) => {
+      type ReturnType = { updateHome: Home };
+      const response = await gqlRequest<ReturnType>(UPDATE_HOME, { id, input });
+      return response?.updateHome;
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['get-homes'] });
+      queryClient.invalidateQueries({ queryKey: ['get-home', data.id] });
+    },
+  });
+};
+
+export const useDeleteHome = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const response = await gqlRequest(DELETE_HOME, { id });
+      return response?.deleteHome;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['get-homes'] }),
+  });
+};
+
+export const useSetPrimaryHome = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      type ReturnType = { setPrimaryHome: Home };
+      const response = await gqlRequest<ReturnType>(SET_PRIMARY_HOME, { id });
+      return response?.setPrimaryHome;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['get-homes'] }),
   });
 };
