@@ -49,7 +49,11 @@ export const useCreateHome = () => {
 export const useUpdateHome = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, isPrimary, ...input }: Partial<Home> & { id: string; isPrimary?: boolean }) => {
+    mutationFn: async ({
+      id,
+      isPrimary,
+      ...input
+    }: Partial<Home> & { id: string; isPrimary?: boolean }) => {
       type ReturnType = { updateHome: Home };
       const response = await gqlRequest<ReturnType>(UPDATE_HOME, { id, input });
       return response?.updateHome;

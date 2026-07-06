@@ -177,7 +177,9 @@ export default function VehicleDetailPage() {
             onDelete={() =>
               deleteRecord.mutate(record.id, { onSuccess: () => setConfirmDeleteRecord(null) })
             }
-            onUpdate={(fields) => updateRecord.mutate({ id: record.id, vehicleId: vehicle.id, ...fields })}
+            onUpdate={(fields) =>
+              updateRecord.mutate({ id: record.id, vehicleId: vehicle.id, ...fields })
+            }
           />
         ))}
       </div>
@@ -239,16 +241,14 @@ function ServiceRecordRow({
           </span>
         )}
         <span className="tw:text-xs tw:text-muted tw:shrink-0">{formatDate(record.date)}</span>
-        <span className="tw:text-xs tw:text-muted tw:shrink-0">{record.mileage.toLocaleString()} mi</span>
+        <span className="tw:text-xs tw:text-muted tw:shrink-0">
+          {record.mileage.toLocaleString()} mi
+        </span>
       </div>
 
       {expanded && (
         <div className="tw:px-5 tw:pb-4 tw:pt-1 tw:border-t tw:border-purpleFaint">
-          <InlineField
-            label="Date"
-            value={record.date}
-            onSave={(v) => onUpdate({ date: v })}
-          />
+          <InlineField label="Date" value={record.date} onSave={(v) => onUpdate({ date: v })} />
           <InlineField
             label="Mileage"
             value={record.mileage}
@@ -278,8 +278,12 @@ function ServiceRecordRow({
             {confirmDelete ? (
               <div className="tw:flex tw:items-center tw:gap-2">
                 <span className="tw:text-xs tw:text-muted">Delete record?</span>
-                <button onClick={onDelete} className="tw:text-xs tw:text-red tw:font-medium">Yes</button>
-                <button onClick={onCancelDelete} className="tw:text-xs tw:text-muted">No</button>
+                <button onClick={onDelete} className="tw:text-xs tw:text-red tw:font-medium">
+                  Yes
+                </button>
+                <button onClick={onCancelDelete} className="tw:text-xs tw:text-muted">
+                  No
+                </button>
               </div>
             ) : (
               <GhostButton text="Delete" color="red" size="sm" onClick={onConfirmDelete} last />

@@ -15,14 +15,17 @@ All types defined in `src/types/homeMaintenance.ts`.
 **Vehicle**: `id`, `userId`, `year`, `make`, `model`, `mileage`, `color?`, `trim?`, `plate?`, `vin?`, `insuranceId?`
 
 **ServiceRecord**: `id`, `vehicleId`, `type` (enum), `date`, `mileage`, `cost?`, `name?`, `description?`
+
 - `ServiceRecordType`: `OIL_CHANGE` | `TIRE_ROTATION` | `SERVICE_ITEM`
 - `type` is immutable after creation — not included in update args
 
 **Home**: `id`, `userId`, `address`, `isPrimary: boolean`, `customData?: string`, `yearBuilt?`, `sqFootage?`, `lotSize?`, `purchasePrice?`, `purchaseDate?`, `notes?`
+
 - `isPrimary` — auto-set `true` for first home; toggled via `setPrimaryHome` mutation
 - `customData` — JSON string stored in GQL schema, parsed/serialized at the frontend boundary; used for arbitrary key-value metadata (property tax, insurance company, etc.)
 
 **HomeTask**: `id`, `homeId`, `name`, `frequency` (enum), `description?`, `lastCompletionDate?: string`
+
 - `HomeTaskFrequency`: `MONTHLY` | `SEASONAL` | `BI_ANNUAL` | `ANNUAL` | `AS_NEEDED`
 - `lastCompletionDate` — denormalized from completions, kept in sync by the backend on create/delete of completions
 
@@ -49,6 +52,7 @@ All types defined in `src/types/homeMaintenance.ts`.
 ## Key Implementation Details
 
 ### Enum inlining
+
 Apollo Router rejects enum values passed as JSON strings — both as top-level variables AND as fields within an InputType variable. Mutations with enum fields use builder functions that inline the enum value directly into the query string as a GraphQL literal, inside the input object:
 
 ```typescript
@@ -64,10 +68,13 @@ export const buildCreateHomeTask = (frequency: HomeTaskFrequency) => `
 Non-enum fields remain as variables. The hook extracts the enum value, calls the builder, and passes the rest as variables. Same pattern for `ServiceRecordType` and for optional enums (builder omits the field entirely when not provided).
 
 ### customData editing
+
 `HomeDetailPage` parses `home.customData` with `JSON.parse` to display key-value pairs. A `CustomDataModal` allows adding/removing/editing rows; on save it serializes back with `JSON.stringify` and calls `updateHome`.
 
 ### Task urgency sorting (`src/utils/taskUtils.ts`)
+
 `sortTasksByUrgency` order:
+
 1. Non-AS_NEEDED tasks with no `lastCompletionDate` (never done)
 2. Overdue tasks (most overdue first)
 3. Upcoming tasks (soonest first)
@@ -78,6 +85,7 @@ Non-enum fields remain as variables. The hook extracts the enum value, calls the
 Task status color coding: never-done or overdue → `tw:text-red`; due within 7 days → `tw:text-blue`; as-needed or not due soon → `tw:text-muted`.
 
 ### Hook patterns
+
 - `useUpdateHomeTask` strips `homeId` from mutation variables (not a valid update arg), uses it only for `makeUpdateHomeTask` cache key
 - `useCreateHomeCompletion` — `homeId` is not in the input type; invalidates `['get-home-tasks', data.homeId]` using the value returned from the server
 - `useUpdateServiceRecord` strips `vehicleId` before sending
@@ -120,10 +128,13 @@ src/
 ---
 
 ## Tailwind
+
 Uses `tw:` prefix (`tw:flex`, `tw:text-sm`, etc.) — required by the MFE Tailwind config.
 
 ## pe-mfe-utils
+
 `@bka-stuff/pe-mfe-utils` is installed via `github:` URL (public tarball). Never use `pnpm link` or workspace overrides — breaks CI.
 
 ## Deploy dependency
+
 `gql-home-maintenance` schema changes (`isPrimary`, `customData`, `lastCompletionDate`) must be deployed and the supergraph recomposed via rover (in CI) before this MFE will work correctly against the live router.
