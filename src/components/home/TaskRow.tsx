@@ -8,7 +8,7 @@ import InlineField from '../InlineField';
 type Props = {
   task: HomeTask;
   onLog: (task: { id: string; homeId: string; name: string }) => void;
-  onDelete: (data: any) => void;
+  onDelete?: (data: any) => void;
 };
 
 function getDueInfo(task: HomeTask): { label: string; cls: string } {
@@ -35,31 +35,35 @@ const TaskRow: FC<Props> = ({ task, onLog, onDelete }) => {
           color="blue"
           onClick={() => setExpanded(!expanded)}
         />
-        <span className="tw:flex-1 tw:min-w-0 tw:truncate tw:text-sm">{task.name}</span>
-        <span className="tw:text-xs tw:text-muted tw:shrink-0">
+        <span className="tw:flex-1 tw:text-sm tw:font-medium tw:text-primary">{task.name}</span>
+        <span className="tw:w-[80px] tw:text-left tw:ml-2 tw:text-xs tw:text-muted tw:shrink-0">
           {FREQUENCY_LABELS[task.frequency]}
         </span>
-        <span className={`tw:text-xs tw:font-medium tw:shrink-0 ${dueClass}`}>{dueLabel}</span>
+        <span className={`tw:min-w-[90px] tw:text-xs tw:font-medium tw:shrink-0 ${dueClass}`}>
+          {dueLabel}
+        </span>
         {task.lastCompletionDate && (
-          <span className="tw:text-xs tw:text-muted tw:shrink-0">
+          <span className="tw:min-w-[100px] tw:text-right tw:text-xs tw:text-muted tw:shrink-0">
             Last: {formatDate(task.lastCompletionDate)}
           </span>
         )}
-        <div className="tw:flex tw:items-center tw:gap-2 tw:shrink-0">
+        <div className="tw:flex tw:items-center tw:gap-2">
           <GhostButton
             text="Log"
-            color="blue"
+            color="green"
             size="sm"
             onClick={() => onLog({ id: task.id, homeId: task.homeId, name: task.name })}
             last
           />
-          <GhostButton
-            text="Delete"
-            color="red"
-            size="sm"
-            onClick={() => onDelete({ id: task.id, name: task.name })}
-            last
-          />
+          {onDelete ? (
+            <GhostButton
+              text="Delete"
+              color="red"
+              size="sm"
+              onClick={() => onDelete({ id: task.id, name: task.name })}
+              last
+            />
+          ) : null}
         </div>
       </div>
 

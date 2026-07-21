@@ -1,14 +1,21 @@
 import React, { FC, useState } from 'react';
-import { Modal, Input, Label, Textarea, Button, GhostButton } from '@bka-stuff/pe-mfe-utils';
+import {
+  Modal,
+  Input,
+  Textarea,
+  ModalContent,
+  InputGroup,
+  ModalButtons,
+} from '@bka-stuff/pe-mfe-utils';
 import { todayISO } from '../../../utils/taskUtils';
 import { useCreateHomeCompletion } from '../../../gql/hooks/homeCompletionHooks';
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  logTaskId: Record<string, any> | null;
+  logTask: Record<string, any> | null;
 };
-const LogCompletionModalNew: FC<Props> = ({ isOpen, onClose, logTaskId }) => {
+const LogCompletionModal: FC<Props> = ({ isOpen, onClose, logTask }) => {
   const [date, setDate] = useState(todayISO());
   const [cost, setCost] = useState('');
   const [notes, setNotes] = useState('');
@@ -17,7 +24,7 @@ const LogCompletionModalNew: FC<Props> = ({ isOpen, onClose, logTaskId }) => {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const taskCompletion = {
-      taskId: logTaskId?.id,
+      taskId: logTask?.id,
       cost: cost ? Number(cost) : undefined,
       date,
       notes,
@@ -34,51 +41,42 @@ const LogCompletionModalNew: FC<Props> = ({ isOpen, onClose, logTaskId }) => {
 
   return (
     <Modal isOpen={isOpen} close={handleClose}>
-      <form
-        onSubmit={handleSubmit}
-        className="tw:flex tw:flex-col tw:gap-4 tw:py-[32px] tw:px-[48px]"
-      >
-        <h1 className="tw:text-center tw:text-[24px]">Log {logTaskId?.name}</h1>
-        <div>
-          <Label text="Date *" />
-          <Input
-            name="date"
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            required
-            full
+      <ModalContent heading={`Log ${logTask?.name}`}>
+        <form onSubmit={handleSubmit} className="tw:flex tw:flex-col tw:gap-4">
+          <InputGroup label="Date *">
+            <Input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              required
+              full
+            />
+          </InputGroup>
+
+          <InputGroup label="Cost">
+            <Input
+              type="number"
+              step="0.01"
+              value={cost}
+              onChange={(e) => setCost(e.target.value)}
+              placeholder="0.00"
+              full
+            />
+          </InputGroup>
+
+          <InputGroup label="Notes">
+            <Textarea name="notes" value={notes} onChange={(e) => setNotes(e.target.value)} full />
+          </InputGroup>
+
+          <ModalButtons
+            onClose={onClose}
+            confirmText={isPending ? 'Saving...' : 'Save'}
+            isDisabled={isPending || !date}
           />
-        </div>
-        <div>
-          <Label text="Cost" />
-          <Input
-            name="date"
-            type="number"
-            step="0.01"
-            value={cost}
-            onChange={(e) => setCost(e.target.value)}
-            placeholder="0.00"
-            full
-          />
-        </div>
-        <div>
-          <Label text="Notes" />
-          <Textarea name="notes" value={notes} onChange={(e) => setNotes(e.target.value)} full />
-        </div>
-        <div className="tw:flex tw:justify-end tw:gap-2 tw:pt-1">
-          <GhostButton text="Cancel" color="red" onClick={handleClose} />
-          <Button
-            type="submit"
-            text={isPending ? 'Saving...' : 'Save'}
-            color="green"
-            disabled={isPending}
-            last
-          />
-        </div>
-      </form>
+        </form>
+      </ModalContent>
     </Modal>
   );
 };
 
-export default LogCompletionModalNew;
+export default LogCompletionModal;
