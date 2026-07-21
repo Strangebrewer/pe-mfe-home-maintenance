@@ -1,23 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetVehicle, useUpdateVehicle, useDeleteVehicle } from '../gql/hooks/vehicleHooks';
-import {
-  useGetServiceRecords,
-  useCreateServiceRecord,
-  useUpdateServiceRecord,
-  useDeleteServiceRecord,
-} from '../gql/hooks/serviceRecordHooks';
-import { ServiceRecord, ServiceRecordType } from '../types/homeMaintenance';
-import { formatDate, todayISO } from '../utils/taskUtils';
+import { useGetServiceRecords } from '../gql/hooks/serviceRecordHooks';
 import InlineField from '../components/InlineField';
-import Modal from '../components/Modal';
-import { ActionButton, GhostButton, Button } from '@bka-stuff/pe-mfe-utils';
-
-const SERVICE_RECORD_LABELS: Record<ServiceRecordType, string> = {
-  [ServiceRecordType.OIL_CHANGE]: 'Oil Change',
-  [ServiceRecordType.TIRE_ROTATION]: 'Tire Rotation',
-  [ServiceRecordType.SERVICE_ITEM]: 'Service Item',
-};
+import { GhostButton, Button } from '@bka-stuff/pe-mfe-utils';
+import AddServiceRecordModal from '../components/home/modals/AddServiceRecordModal';
+import ServiceRecordRow from '../components/home/ServiceRecordRow';
 
 export default function VehicleDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -29,13 +17,9 @@ export default function VehicleDetailPage() {
 
   const updateVehicle = useUpdateVehicle();
   const deleteVehicle = useDeleteVehicle();
-  const createRecord = useCreateServiceRecord();
-  const updateRecord = useUpdateServiceRecord();
-  const deleteRecord = useDeleteServiceRecord(id!);
 
   const [showAddRecord, setShowAddRecord] = useState(false);
   const [confirmDeleteVehicle, setConfirmDeleteVehicle] = useState(false);
-  const [confirmDeleteRecord, setConfirmDeleteRecord] = useState<string | null>(null);
 
   if (isPending) return <div className="tw:p-6 tw:text-muted">Loading...</div>;
   if (isError || !vehicle) return <div className="tw:p-6 tw:text-red">Vehicle not found.</div>;
@@ -63,7 +47,6 @@ export default function VehicleDetailPage() {
         ← Back
       </button>
 
-      {/* Vehicle info */}
       <div className="tw:bg-[#1a0f2e] tw:rounded-lg tw:border tw:border-purpleBorder tw:p-5 tw:mb-6">
         <div className="tw:flex tw:items-start tw:justify-between tw:mb-3">
           <h1 className="tw:text-xl tw:font-bold tw:text-primary">
@@ -155,7 +138,6 @@ export default function VehicleDetailPage() {
         </div>
       </div>
 
-      {/* Service Records */}
       <div className="tw:bg-[#1a0f2e] tw:rounded-lg tw:border tw:border-purpleBorder">
         <div className="tw:flex tw:items-center tw:justify-between tw:px-5 tw:py-4 tw:border-b tw:border-purpleBorder">
           <h2 className="tw:font-semibold tw:text-primary">Service Records</h2>
@@ -167,271 +149,16 @@ export default function VehicleDetailPage() {
         )}
 
         {sortedRecords.map((record) => (
-          <ServiceRecordRow
-            key={record.id}
-            record={record}
-            vehicleId={vehicle.id}
-            confirmDelete={confirmDeleteRecord === record.id}
-            onConfirmDelete={() => setConfirmDeleteRecord(record.id)}
-            onCancelDelete={() => setConfirmDeleteRecord(null)}
-            onDelete={() =>
-              deleteRecord.mutate(record.id, { onSuccess: () => setConfirmDeleteRecord(null) })
-            }
-            onUpdate={(fields) =>
-              updateRecord.mutate({ id: record.id, vehicleId: vehicle.id, ...fields })
-            }
-          />
+          <ServiceRecordRow key={record.id} record={record} vehicleId={vehicle.id} />
         ))}
       </div>
 
-      {showAddRecord && (
-        <AddServiceRecordModal
-          vehicleId={vehicle.id}
-          currentMileage={vehicle.mileage}
-          onClose={() => setShowAddRecord(false)}
-          onSave={(data) => createRecord.mutate(data, { onSuccess: () => setShowAddRecord(false) })}
-          isPending={createRecord.isPending}
-        />
-      )}
+      <AddServiceRecordModal
+        isOpen={showAddRecord}
+        onClose={() => setShowAddRecord(false)}
+        vehicleId={vehicle.id}
+        currentMileage={vehicle.mileage}
+      />
     </div>
-  );
-}
-
-type ServiceRecordUpdateFields = {
-  date?: string;
-  mileage?: number;
-  cost?: number;
-  name?: string;
-  description?: string;
-};
-
-function ServiceRecordRow({
-  record,
-  vehicleId: _vehicleId,
-  confirmDelete,
-  onConfirmDelete,
-  onCancelDelete,
-  onDelete,
-  onUpdate,
-}: {
-  record: ServiceRecord;
-  vehicleId: string;
-  confirmDelete: boolean;
-  onConfirmDelete: () => void;
-  onCancelDelete: () => void;
-  onDelete: () => void;
-  onUpdate: (fields: ServiceRecordUpdateFields) => void;
-}) {
-  const [expanded, setExpanded] = useState(false);
-
-  return (
-    <div className="tw:border-b tw:border-purpleFaint tw:last:border-b-0">
-      <div className="tw:flex tw:items-center tw:gap-3 tw:px-5 tw:py-3">
-        <ActionButton
-          iconClass={expanded ? 'fas fa-caret-down' : 'fas fa-caret-right'}
-          color="blue"
-          onClick={() => setExpanded(!expanded)}
-        />
-        <span className="tw:flex-1 tw:min-w-0 tw:truncate tw:text-sm">
-          {record.name || SERVICE_RECORD_LABELS[record.type]}
-        </span>
-        {record.name && (
-          <span className="tw:text-xs tw:text-muted tw:shrink-0">
-            {SERVICE_RECORD_LABELS[record.type]}
-          </span>
-        )}
-        <span className="tw:text-xs tw:text-muted tw:shrink-0">{formatDate(record.date)}</span>
-        <span className="tw:text-xs tw:text-muted tw:shrink-0">
-          {record.mileage.toLocaleString()} mi
-        </span>
-      </div>
-
-      {expanded && (
-        <div className="tw:px-5 tw:pb-4 tw:pt-1 tw:border-t tw:border-purpleFaint">
-          <InlineField label="Date" value={record.date} onSave={(v) => onUpdate({ date: v })} />
-          <InlineField
-            label="Mileage"
-            value={record.mileage}
-            type="number"
-            onSave={(v) => onUpdate({ mileage: Number(v) })}
-          />
-          <InlineField
-            label="Cost"
-            value={record.cost}
-            type="number"
-            onSave={(v) => onUpdate({ cost: v ? Number(v) : undefined })}
-            placeholder="Not set"
-          />
-          <InlineField
-            label="Name"
-            value={record.name}
-            onSave={(v) => onUpdate({ name: v || undefined })}
-            placeholder="None"
-          />
-          <InlineField
-            label="Description"
-            value={record.description}
-            onSave={(v) => onUpdate({ description: v || undefined })}
-            placeholder="None"
-          />
-          <div className="tw:flex tw:justify-end tw:pt-2">
-            {confirmDelete ? (
-              <div className="tw:flex tw:items-center tw:gap-2">
-                <span className="tw:text-xs tw:text-muted">Delete record?</span>
-                <button onClick={onDelete} className="tw:text-xs tw:text-red tw:font-medium">
-                  Yes
-                </button>
-                <button onClick={onCancelDelete} className="tw:text-xs tw:text-muted">
-                  No
-                </button>
-              </div>
-            ) : (
-              <GhostButton text="Delete" color="red" size="sm" onClick={onConfirmDelete} last />
-            )}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function AddServiceRecordModal({
-  vehicleId,
-  currentMileage,
-  onClose,
-  onSave,
-  isPending,
-}: {
-  vehicleId: string;
-  currentMileage: number;
-  onClose: () => void;
-  onSave: (data: {
-    vehicleId: string;
-    type: ServiceRecordType;
-    date: string;
-    mileage: number;
-    cost?: number;
-    name?: string;
-    description?: string;
-  }) => void;
-  isPending: boolean;
-}) {
-  const [type, setType] = useState<ServiceRecordType>(ServiceRecordType.OIL_CHANGE);
-  const [date, setDate] = useState(todayISO());
-  const [mileage, setMileage] = useState(currentMileage.toString());
-  const [cost, setCost] = useState('');
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSave({
-      vehicleId,
-      type,
-      date,
-      mileage: Number(mileage),
-      cost: cost ? Number(cost) : undefined,
-      name: name || undefined,
-      description: description || undefined,
-    });
-  };
-
-  const inputCls =
-    'tw:w-full tw:border tw:border-purple tw:rounded tw:px-3 tw:py-2 tw:text-sm tw:bg-bg tw:text-primary tw:focus:outline-none tw:focus:ring-1 tw:focus:ring-purple';
-
-  return (
-    <Modal title="Add Service Record" onClose={onClose}>
-      <form onSubmit={handleSubmit} className="tw:flex tw:flex-col tw:gap-4">
-        <div>
-          <label className="tw:block tw:text-sm tw:font-medium tw:text-muted tw:mb-1">Type *</label>
-          <select
-            value={type}
-            onChange={(e) => setType(e.target.value as ServiceRecordType)}
-            className={inputCls}
-          >
-            {Object.values(ServiceRecordType).map((t) => (
-              <option key={t} value={t}>
-                {SERVICE_RECORD_LABELS[t]}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="tw:grid tw:grid-cols-2 tw:gap-3">
-          <div>
-            <label className="tw:block tw:text-sm tw:font-medium tw:text-muted tw:mb-1">
-              Date *
-            </label>
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              required
-              className={inputCls}
-            />
-          </div>
-          <div>
-            <label className="tw:block tw:text-sm tw:font-medium tw:text-muted tw:mb-1">
-              Mileage *
-            </label>
-            <input
-              type="number"
-              value={mileage}
-              onChange={(e) => setMileage(e.target.value)}
-              required
-              className={inputCls}
-            />
-          </div>
-        </div>
-        <div className="tw:grid tw:grid-cols-2 tw:gap-3">
-          <div>
-            <label className="tw:block tw:text-sm tw:font-medium tw:text-muted tw:mb-1">Cost</label>
-            <input
-              type="number"
-              step="0.01"
-              value={cost}
-              onChange={(e) => setCost(e.target.value)}
-              className={inputCls}
-              placeholder="0.00"
-            />
-          </div>
-          <div>
-            <label className="tw:block tw:text-sm tw:font-medium tw:text-muted tw:mb-1">Name</label>
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className={inputCls}
-              placeholder="e.g. Air filter"
-            />
-          </div>
-        </div>
-        <div>
-          <label className="tw:block tw:text-sm tw:font-medium tw:text-muted tw:mb-1">
-            Description
-          </label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={2}
-            className={inputCls}
-          />
-        </div>
-        <div className="tw:flex tw:justify-end tw:gap-2 tw:pt-1">
-          <button
-            type="button"
-            onClick={onClose}
-            className="tw:text-sm tw:text-muted tw:hover:text-primary tw:px-4 tw:py-2"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            disabled={isPending}
-            className="tw:text-sm tw:border tw:border-purple tw:text-purple tw:hover:bg-purple tw:hover:text-white tw:disabled:opacity-50 tw:rounded tw:px-4 tw:py-2"
-          >
-            {isPending ? 'Saving...' : 'Add Record'}
-          </button>
-        </div>
-      </form>
-    </Modal>
   );
 }

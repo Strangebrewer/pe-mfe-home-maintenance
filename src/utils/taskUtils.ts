@@ -1,4 +1,4 @@
-import { HomeTask, HomeTaskFrequency } from '../types/homeMaintenance';
+import { HomeTask, HomeTaskFrequency, ServiceRecordType } from '../types/homeMaintenance';
 
 const FREQUENCY_DAYS: Record<HomeTaskFrequency, number | null> = {
   [HomeTaskFrequency.MONTHLY]: 30,
@@ -14,6 +14,12 @@ export const FREQUENCY_LABELS: Record<HomeTaskFrequency, string> = {
   [HomeTaskFrequency.BI_ANNUAL]: 'Bi-Annual',
   [HomeTaskFrequency.ANNUAL]: 'Annual',
   [HomeTaskFrequency.AS_NEEDED]: 'As Needed',
+};
+
+export const SERVICE_RECORD_LABELS: Record<ServiceRecordType, string> = {
+  [ServiceRecordType.OIL_CHANGE]: 'Oil Change',
+  [ServiceRecordType.TIRE_ROTATION]: 'Tire Rotation',
+  [ServiceRecordType.SERVICE_ITEM]: 'Service Item',
 };
 
 export function getNextDueDate(task: HomeTask): Date | null {

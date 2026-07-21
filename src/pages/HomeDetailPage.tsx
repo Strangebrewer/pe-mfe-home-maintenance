@@ -4,7 +4,7 @@ import { useGetHome } from '../gql/hooks/homeHooks';
 import { useDeleteHomeTask, useGetHomeTasks } from '../gql/hooks/homeTaskHooks';
 import { sortTasksByUrgency } from '../utils/taskUtils';
 import AddTaskModal from '../components/home/modals/AddTaskModal';
-import LogCompletionModalNew from '../components/home/modals/LogCompletionModal';
+import LogCompletionModal from '../components/home/modals/LogCompletionModal';
 import TaskRow from '../components/home/TaskRow';
 import { Button, TransparentButton, DeleteConfirmationModal } from '@bka-stuff/pe-mfe-utils';
 import HomeDetails from '../components/home/HomeDetails';
@@ -19,9 +19,7 @@ export default function HomeDetailPage() {
   const { mutate: deleteTask } = useDeleteHomeTask(id as string);
 
   const [showAddTask, setShowAddTask] = useState(false);
-  const [logTaskId, setLogTaskId] = useState<{ id: string; homeId: string; name: string } | null>(
-    null,
-  );
+  const [logTask, setLogTask] = useState<{ id: string; homeId: string; name: string } | null>(null);
   const [confirmDeleteTask, setConfirmDeleteTask] = useState<{ id: string; name: string } | null>(
     null,
   );
@@ -55,7 +53,7 @@ export default function HomeDetailPage() {
           <TaskRow
             key={task.id}
             task={task}
-            onLog={setLogTaskId}
+            onLog={setLogTask}
             onDelete={(data: any) => setConfirmDeleteTask(data)}
           />
         ))}
@@ -63,11 +61,7 @@ export default function HomeDetailPage() {
 
       <AddTaskModal isOpen={showAddTask} homeId={home.id} onClose={() => setShowAddTask(false)} />
 
-      <LogCompletionModalNew
-        isOpen={!!logTaskId}
-        onClose={() => setLogTaskId(null)}
-        logTaskId={logTaskId}
-      />
+      <LogCompletionModal isOpen={!!logTask} onClose={() => setLogTask(null)} logTask={logTask} />
 
       <DeleteConfirmationModal
         isOpen={!!confirmDeleteTask}
