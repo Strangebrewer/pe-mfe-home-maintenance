@@ -8,9 +8,9 @@ import {
   Textarea,
 } from '@bka-stuff/pe-mfe-utils';
 import { FC, useState } from 'react';
-import { HomeTaskFrequency } from '../../../types/homeMaintenance';
-import { FREQUENCY_LABELS } from '../../../utils/taskUtils';
-import { useCreateHomeTask } from '../../../gql/hooks/homeTaskHooks';
+import { HomeTaskFrequency } from '../../types/homeMaintenance';
+import { FREQUENCY_LABELS } from '../../utils/taskUtils';
+import { useCreateHomeTask } from '../../gql/hooks/homeTaskHooks';
 
 type Props = {
   isOpen: boolean;

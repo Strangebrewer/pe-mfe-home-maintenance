@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, ItemCard } from '@bka-stuff/pe-mfe-utils';
-import AddVehicleModal from './modals/AddVehicleModal';
+import AddVehicleModal from './AddVehicleModal';
 import { useGetVehicles } from '../../gql/hooks/vehicleHooks';
 
 type Props = {};

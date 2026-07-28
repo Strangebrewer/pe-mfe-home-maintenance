@@ -1,9 +1,8 @@
 import { FC, useState } from 'react';
-import { ActionButton, GhostButton } from '@bka-stuff/pe-mfe-utils';
+import { ActionButton, GhostButton, InlineField } from '@bka-stuff/pe-mfe-utils';
 import { HomeTask, HomeTaskFrequency } from '../../types/homeMaintenance';
 import { FREQUENCY_LABELS, formatDate, getDaysUntilDue } from '../../utils/taskUtils';
 import { useUpdateHomeTask } from '../../gql/hooks/homeTaskHooks';
-import InlineField from '../InlineField';
 
 type Props = {
   task: HomeTask;

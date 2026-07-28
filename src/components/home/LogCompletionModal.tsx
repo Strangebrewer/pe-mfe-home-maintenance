@@ -7,8 +7,8 @@ import {
   InputGroup,
   ModalButtons,
 } from '@bka-stuff/pe-mfe-utils';
-import { todayISO } from '../../../utils/taskUtils';
-import { useCreateHomeCompletion } from '../../../gql/hooks/homeCompletionHooks';
+import { todayISO } from '../../utils/taskUtils';
+import { useCreateHomeCompletion } from '../../gql/hooks/homeCompletionHooks';
 
 type Props = {
   isOpen: boolean;

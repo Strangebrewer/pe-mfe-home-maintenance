@@ -7,7 +7,7 @@ import {
   Modal,
   ModalContent,
 } from '@bka-stuff/pe-mfe-utils';
-import { useCreateHome } from '../../../gql/hooks/homeHooks';
+import { useCreateHome } from '../../gql/hooks/homeHooks';
 
 type Props = {
   isOpen: boolean;

@@ -1,8 +1,7 @@
 import { FC, useState } from 'react';
-import { ActionButton, GhostButton, DeleteConfirmationModal } from '@bka-stuff/pe-mfe-utils';
+import { ActionButton, GhostButton, InlineField } from '@bka-stuff/pe-mfe-utils';
 import { ServiceRecord } from '../../types/homeMaintenance';
 import { formatDate, SERVICE_RECORD_LABELS } from '../../utils/taskUtils';
-import InlineField from '../InlineField';
 import { useDeleteServiceRecord, useUpdateServiceRecord } from '../../gql/hooks/serviceRecordHooks';
 
 type Props = {
