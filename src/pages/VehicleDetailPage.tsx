@@ -2,10 +2,9 @@ import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetVehicle, useUpdateVehicle, useDeleteVehicle } from '../gql/hooks/vehicleHooks';
 import { useGetServiceRecords } from '../gql/hooks/serviceRecordHooks';
-import InlineField from '../components/InlineField';
-import { GhostButton, Button } from '@bka-stuff/pe-mfe-utils';
-import AddServiceRecordModal from '../components/home/modals/AddServiceRecordModal';
-import ServiceRecordRow from '../components/home/ServiceRecordRow';
+import { GhostButton, Button, InlineField } from '@bka-stuff/pe-mfe-utils';
+import AddServiceRecordModal from '../components/vehicles/AddServiceRecordModal';
+import ServiceRecordRow from '../components/vehicles/ServiceRecordRow';
 
 export default function VehicleDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -39,7 +38,7 @@ export default function VehicleDetailPage() {
   };
 
   return (
-    <div className="tw:max-w-3xl tw:mx-auto tw:px-4 tw:py-6">
+    <div className="tw:max-w-5xl tw:mx-auto tw:px-4 tw:py-6">
       <button
         onClick={() => navigate('/home-maintenance')}
         className="tw:text-sm tw:text-muted tw:hover:text-primary tw:mb-4 tw:flex tw:items-center tw:gap-1"
@@ -78,7 +77,7 @@ export default function VehicleDetailPage() {
           )}
         </div>
 
-        <div className="tw:grid tw:grid-cols-2 tw:gap-x-6">
+        <div className="tw:grid tw:grid-cols-2 tw:gap-6">
           <div>
             <InlineField
               label="Year"

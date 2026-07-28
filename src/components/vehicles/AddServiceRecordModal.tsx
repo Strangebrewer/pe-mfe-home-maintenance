@@ -8,9 +8,9 @@ import {
   Textarea,
 } from '@bka-stuff/pe-mfe-utils';
 import { FC, useState } from 'react';
-import { ServiceRecordType } from '../../../types/homeMaintenance';
-import { SERVICE_RECORD_LABELS, todayISO } from '../../../utils/taskUtils';
-import { useCreateServiceRecord } from '../../../gql/hooks/serviceRecordHooks';
+import { ServiceRecordType } from '../../types/homeMaintenance';
+import { SERVICE_RECORD_LABELS, todayISO } from '../../utils/taskUtils';
+import { useCreateServiceRecord } from '../../gql/hooks/serviceRecordHooks';
 
 type Props = {
   isOpen: boolean;

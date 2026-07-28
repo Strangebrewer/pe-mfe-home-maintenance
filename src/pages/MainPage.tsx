@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetHomes, useSetPrimaryHome } from '../gql/hooks/homeHooks';
 import { GhostButton, Button } from '@bka-stuff/pe-mfe-utils';
-import AddHomeModal from '../components/home/modals/AddHomeModal';
+import AddHomeModal from '../components/home/AddHomeModal';
 import HomeTasks from '../components/home/HomeTasks';
-import VehiclesList from '../components/home/VehiclesList';
+import VehiclesList from '../components/vehicles/VehiclesList';
 
 export type LogCompletionForm = { id: string; homeId: string; name: string };
 

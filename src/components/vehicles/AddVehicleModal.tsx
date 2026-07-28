@@ -1,6 +1,6 @@
 import { FC, FormEvent, useState } from 'react';
 import { Input, InputGroup, ModalButtons, Modal, ModalContent } from '@bka-stuff/pe-mfe-utils';
-import { useCreateVehicle } from '../../../gql/hooks/vehicleHooks';
+import { useCreateVehicle } from '../../gql/hooks/vehicleHooks';
 
 type Props = {
   isOpen: boolean;

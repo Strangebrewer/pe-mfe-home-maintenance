@@ -1,6 +1,6 @@
 import { Modal, Input, Button, GhostButton } from '@bka-stuff/pe-mfe-utils';
 import { FC, useEffect, useState } from 'react';
-import { useUpdateHome } from '../../../gql/hooks/homeHooks';
+import { useUpdateHome } from '../../gql/hooks/homeHooks';
 
 type Props = {
   isOpen: boolean;

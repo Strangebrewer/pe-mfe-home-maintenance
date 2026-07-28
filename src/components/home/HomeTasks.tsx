@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 import { useGetHomeTasks } from '../../gql/hooks/homeTaskHooks';
 import { sortTasksByUrgency } from '../../utils/taskUtils';
 import { LogCompletionForm } from '../../pages/MainPage';
-import LogCompletionModal from './modals/LogCompletionModal';
+import LogCompletionModal from './LogCompletionModal';
 import TaskRow from './TaskRow';
 
 type Props = {
