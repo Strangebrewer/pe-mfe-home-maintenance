@@ -1,4 +1,4 @@
-import { Modal, Input, Button, GhostButton } from '@bka-stuff/pe-mfe-utils';
+import { Modal, Input, Button, GhostButton, ModalContent } from '@bka-stuff/pe-mfe-utils';
 import { FC, useEffect, useState } from 'react';
 import { useUpdateHome } from '../../gql/hooks/homeHooks';
 
@@ -43,54 +43,52 @@ const CustomDataModal: FC<Props> = ({ isOpen, onClose, homeId, customData }) => 
 
   return (
     <Modal isOpen={isOpen} close={onClose}>
-      <form
-        onSubmit={handleSubmit}
-        className="tw:flex tw:flex-col tw:gap-4 tw:py-[32px] tw:px-[48px]"
-      >
-        <h1 className="tw:text-center tw:text-[24px]">Custom Data</h1>
-        <div className="tw:flex tw:flex-col tw:gap-2">
-          {rows.map((row, i) => (
-            <div key={i} className="tw:flex tw:gap-2 tw:items-center">
-              <div className="tw:flex-1">
-                <Input
-                  type="text"
-                  name={`key-${i}`}
-                  value={row.key}
-                  onChange={(e) => updateRow(i, 'key', e.target.value)}
-                  full
-                />
+      <ModalContent heading="Custom Data">
+        <form onSubmit={handleSubmit} className="tw:flex tw:flex-col tw:gap-4">
+          <div className="tw:flex tw:flex-col tw:gap-2">
+            {rows.map((row, i) => (
+              <div key={i} className="tw:flex tw:gap-2 tw:items-center">
+                <div className="tw:flex-1">
+                  <Input
+                    type="text"
+                    name={`key-${i}`}
+                    value={row.key}
+                    onChange={(e) => updateRow(i, 'key', e.target.value)}
+                    full
+                  />
+                </div>
+                <div className="tw:flex-1">
+                  <Input
+                    type="text"
+                    name={`value-${i}`}
+                    value={row.value}
+                    onChange={(e) => updateRow(i, 'value', e.target.value)}
+                    full
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeRow(i)}
+                  className="tw:text-red tw:hover:text-white tw:text-lg tw:leading-none"
+                >
+                  ×
+                </button>
               </div>
-              <div className="tw:flex-1">
-                <Input
-                  type="text"
-                  name={`value-${i}`}
-                  value={row.value}
-                  onChange={(e) => updateRow(i, 'value', e.target.value)}
-                  full
-                />
-              </div>
-              <button
-                type="button"
-                onClick={() => removeRow(i)}
-                className="tw:text-red tw:hover:text-white tw:text-lg tw:leading-none"
-              >
-                ×
-              </button>
-            </div>
-          ))}
-        </div>
-        <div className="tw:flex tw:justify-center tw:pt-2">
-          <GhostButton text="+ Add field" color="blue" onClick={addRow} />
-          <GhostButton text="Cancel" color="red" onClick={onClose} />
-          <Button
-            last
-            text={isPending ? 'Saving...' : 'Save'}
-            color="green"
-            onClick={handleSubmit}
-            disabled={isPending}
-          />
-        </div>
-      </form>
+            ))}
+          </div>
+          <div className="tw:flex tw:justify-center tw:pt-2">
+            <GhostButton text="+ Add field" color="blue" onClick={addRow} />
+            <GhostButton text="Cancel" color="red" onClick={onClose} />
+            <Button
+              last
+              text={isPending ? 'Saving...' : 'Save'}
+              color="green"
+              onClick={handleSubmit}
+              disabled={isPending}
+            />
+          </div>
+        </form>
+      </ModalContent>
     </Modal>
   );
 };
